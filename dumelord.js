@@ -89,9 +89,18 @@ function falcon() {
     form.classList.add("shake");
     return;
   }
+async function submitFeedback(customerName, customerMessage) {
+  let clientIP = "unknown";
+  try {
+    const ipRes = await fetch("https://api.ipify.org?format=json");
+    const ipData = await ipRes.json();
+    clientIP = ipData.ip;
+  }
+}
   const cleanPayload = new URLSearchParams();
   cleanPayload.append("Name", customerName);
   cleanPayload.append("Feedback", customerMessage);
+  cleanPayload.append("IP", stamp);
   cleanPayload.append("timestamp", Date.now().toString());
   unlockBtn.disabled = true;
   spinner.style.display = "block";

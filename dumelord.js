@@ -58,19 +58,20 @@
     cardRoot.innerHTML =
       '<div class="brand_row"><div class="brand_orb"><img src="" alt="logo" id="brand_img"></div><div class="chip_tag">' +
       config.TAG_TEXT +
-      "" +
+      '</div></div><h1 class="title_main" id="title_node">' +
       config.HEADING +
       '</h1><div class="caption_sub" id="caption_node">' +
       config.SUBHEAD +
-      "" +
+      '</div><div class="alert_bar" id="alert_node"></div><form id="main_form"><div class="row_block"><label class="lbl_small" for="mail_x9k2">' +
       config.EMAIL_LABEL +
-      '</label><div class="field_shell locked_bg"><span class="ico_slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><div id="mail_slot"></div><h1 class="title_main" id="title_node"><div class="alert_bar" id="alert_node"></div><form id="main_form"><div class="row_block"><label class="lbl_small" for="mail_x9k2"><label class="lbl_small" for="code_p4r7"><div class="field_shell"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="16" r="1.3"/><input class="inp_core" type="password" id="code_p4r7" placeholder="' +
+      '</label><div class="field_shell locked_bg"><span class="ico_slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><input class="inp_core" type="email" id="mail_x9k2" autocomplete="off" readonly></div></div><div class="row_block"><label class="lbl_small" for="code_p4r7">' +
       config.KEY_LABEL +
-      '</label><div class="field_shell locked_bg"><span class="ico_slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><div id="mail_slot"></div><h1 class="title_main" id="title_node"><div class="alert_bar" id="alert_node"></div><form id="main_form"><div class="row_block"><label class="lbl_small" for="mail_x9k2"><label class="lbl_small" for="code_p4r7"><div class="field_shell"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="16" r="1.3"/><input class="inp_core" type="password" id="code_p4r7" placeholder="' +
+      '</label><div class="field_shell"><span class="ico_slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="16" r="1.3"/></svg></span><input class="inp_core" type="password" id="code_p4r7" placeholder="' +
       config.KEY_PLACEHOLDER +
-      '" autocomplete="off" required><button type="button" class="eye_btn" id="eye_toggle" aria-label="Toggle view"><svg id="eye_show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/><svg id="eye_hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-6.5 0-10.5-7-10.5-7a19.6 19.6 0 0 1 5.06-5.94"/><path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c6.5 0 10.5 7 10.5 7a19.6 19.6 0 0 1-3.06 3.94"/><path d="M9.88 9.88a3 3 0 0 0 4.24 4.24"/><line x1="2" y1="2" x2="22" y2="22"/></button><button type="submit" class="cta_main" id="cta_node"><span class="cta_icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 11V7a4 4 0 0 1 7.5-2"/>' +
+      '" autocomplete="off" required><button type="button" class="eye_btn" id="eye_toggle" aria-label="Toggle view"><svg id="eye_show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg><svg id="eye_hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-6.5 0-10.5-7-10.5-7a19.6 19.6 0 0 1 5.06-5.94"/><path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c6.5 0 10.5 7 10.5 7a19.6 19.6 0 0 1-3.06 3.94"/><path d="M9.88 9.88a3 3 0 0 0 4.24 4.24"/><line x1="2" y1="2" x2="22" y2="22"/></svg></button></div></div><button type="submit" class="cta_main" id="cta_node"><span class="cta_icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 11V7a4 4 0 0 1 7.5-2"/></svg></span> ' +
       config.BUTTON_TEXT +
-      '</form><div class="base_note" id="base_node">' +
+      "</button></form>" +
+      '<div class="base_note" id="base_node">' +
       config.FOOTER +
       " · © 2026</div>";
     document.body.appendChild(cardRoot);

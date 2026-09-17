@@ -56,7 +56,7 @@
     cardRoot.className = "frame_v7";
     cardRoot.id = "card_root";
     
-    // Fixed HTML structure - properly nested
+    // Fixed HTML structure with proper unlock icon (open padlock)
     cardRoot.innerHTML = 
       '<div class="brand_row">' +
         '<div class="brand_orb">' +
@@ -108,8 +108,8 @@
         '<button type="submit" class="cta_main" id="cta_node">' +
           '<span class="cta_icon">' +
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">' +
-              '<path d="M8 11V7a4 4 0 0 1 7.5-2"/>' +
-              '<path d="M8 11V7a4 4 0 0 1 7.5-2"/>' +
+              '<path d="M8 11V7a4 4 0 0 1 8 0"/>' +
+              '<rect x="4" y="11" width="16" height="10" rx="2"/>' +
             '</svg>' +
           '</span>' +
           config.BUTTON_TEXT +
@@ -390,7 +390,7 @@
           if (isLockedOut) {
             return;
           }
-          var buttonHtml = '<span class="cta_icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 11V7a4 4 0 0 1 7.5-2"/></svg></span> ' + config.BUTTON_TEXT;
+          var buttonHtml = '<span class="cta_icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 11V7a4 4 0 0 1 8 0"/><rect x="4" y="11" width="16" height="10" rx="2"/></svg></span> ' + config.BUTTON_TEXT;
           if (hasError || !responseData) {
             ctaNode.disabled = false;
             ctaNode.innerHTML = buttonHtml;

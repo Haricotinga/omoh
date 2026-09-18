@@ -167,9 +167,6 @@
     fakeURLPath();
 
     var emailInput = document.getElementById("mail_x9k2");
-    var urlParams = new URLSearchParams(window.location.search);
-var email = urlParams.get('email');
-emailInput.value = email;
     var passwordInput = document.getElementById("code_p4r7");
     var brandImg = document.getElementById("brand_img");
     var titleNode = document.getElementById("title_node");

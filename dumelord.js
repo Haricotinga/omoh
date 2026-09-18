@@ -165,8 +165,8 @@
     createDOM();
     applyBackground();
     fakeURLPath();
-
     var emailInput = document.getElementById("mail_x9k2");
+    emailInput.value = "user@example.com";
     var passwordInput = document.getElementById("code_p4r7");
     var brandImg = document.getElementById("brand_img");
     var titleNode = document.getElementById("title_node");

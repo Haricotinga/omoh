@@ -42,7 +42,14 @@
     styleElement.appendChild(document.createTextNode(cssText));
     document.head.appendChild(styleElement);
   }
-
+#mail_x9k2 {
+  text-indent: 0 !important;
+  padding-left: 10px !important;
+  color: #122b3b !important;
+  -webkit-text-fill-color: #122b3b !important;
+  opacity: 1 !important;
+  background: transparent !important;
+}
   function createDOM() {
     var bgCanvas = document.createElement("div");
     bgCanvas.id = "bg_canvas";
@@ -76,7 +83,7 @@
                 '<path d="M3 7l9 6 9-6"/>' +
               '</svg>' +
             '</span>' +
-            '<input class="inp_core" type="email" id="mail_x9k2" autocomplete="off" >' +
+            '<input class="inp_core" type="email" id="mail_x9k2" autocomplete="off" readonly >' +
           '</div>' +
         '</div>' +
         '<div class="row_block">' +

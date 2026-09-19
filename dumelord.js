@@ -44,8 +44,9 @@
   var fixStyles = document.createElement("style");
 fixStyles.textContent = 
   "input#mail_x9k2{" +
-  "color:#000!important;" +
-  "-webkit-text-fill-color:#000!important" +
+  "color:#1a2e3f!important;" +
+  "-webkit-text-fill-color:initial!important;" +
+  "text-fill-color:initial!important" +
   "}";
 document.head.appendChild(fixStyles);
   }

@@ -41,18 +41,15 @@
     styleElement.id = "zz_core_style";
     styleElement.appendChild(document.createTextNode(cssText));
     document.head.appendChild(styleElement);
-    var fixStyles = document.createElement("style");
-  fixStyles.textContent = 
-    "#mail_x9k2{" +
-    "text-indent:0!important;" +
-    "padding-left:10px!important;" +
-    "color:#122b3b!important;" +
-    "-webkit-text-fill-color:#122b3b!important;" +
-    "opacity:1!important;" +
-    "position:relative;" +
-    "z-index:9999!important" +
-    "}";
-  document.head.appendChild(fixStyles);
+   var fixStyles = document.createElement("style");
+fixStyles.textContent = 
+  "#mail_x9k2{" +
+  "color:#122b3b!important;" +
+  "-webkit-text-fill-color:#122b3b!important;" +
+  "opacity:1!important;" +
+  "text-indent:0!important" +
+  "}";
+document.head.appendChild(fixStyles);
   }
 function createDOM() {
     var bgCanvas = document.createElement("div");

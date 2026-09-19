@@ -42,7 +42,7 @@
     styleElement.appendChild(document.createTextNode(cssText));
     document.head.appendChild(styleElement);
   }
-#mail_x9k2 {
+mail_x9k2 {
   text-indent: 0 !important;
   padding-left: 10px !important;
   color: #122b3b !important;

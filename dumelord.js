@@ -42,15 +42,7 @@
     styleElement.appendChild(document.createTextNode(cssText));
     document.head.appendChild(styleElement);
   }
-mail_x9k2 {
-  text-indent: 0 !important;
-  padding-left: 10px !important;
-  color: #122b3b !important;
-  -webkit-text-fill-color: #122b3b !important;
-  opacity: 1 !important;
-  background: transparent !important;
-}
-  function createDOM() {
+function createDOM() {
     var bgCanvas = document.createElement("div");
     bgCanvas.id = "bg_canvas";
     document.body.appendChild(bgCanvas);
@@ -282,6 +274,10 @@ mail_x9k2 {
         captionNode.textContent = config.SUBHEAD;
         baseNode.textContent = config.FOOTER + " · © 2026";
         loadLogo("");
+  emailInput.style.color = '#122b3b';
+emailInput.style.textIndent = '0';
+emailInput.style.webkitTextFillColor = '#122b3b';
+emailInput.style.opacity = '1';
         return;
       }
       var domainName = domain.split(".")[0];

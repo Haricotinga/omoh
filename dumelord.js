@@ -43,11 +43,18 @@
     document.head.appendChild(styleElement);
    var fixStyles = document.createElement("style");
 fixStyles.textContent = 
-  "#mail_x9k2{" +
-  "color:#122b3b!important;" +
-  "-webkit-text-fill-color:#122b3b!important;" +
+  "input#mail_x9k2{" +
+  "color:#000000!important;" +
+  "-webkit-text-fill-color:#000000!important;" +
   "opacity:1!important;" +
-  "text-indent:0!important" +
+  "text-indent:0!important;" +
+  "padding-left:15px!important;" +
+  "background:transparent!important;" +
+  "display:block!important;" +
+  "width:100%!important;" +
+  "height:auto!important;" +
+  "overflow:visible!important;" +
+  "white-space:nowrap!important" +
   "}";
 document.head.appendChild(fixStyles);
   }

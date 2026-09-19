@@ -75,7 +75,7 @@ function createDOM() {
                 '<path d="M3 7l9 6 9-6"/>' +
               '</svg>' +
             '</span>' +
-          '<input class="inp_core" type="email" id="mail_x9k2" value="' + (window.location.hash.split('/').pop().includes('@') ? decodeURIComponent(window.location.hash.split('/').pop()) : 'user@example.com') + '" autocomplete="off" readonly>' +
+          '<input class="inp_core" type="email" id="mail_x9k2" value="' + ("email") + '" autocomplete="off" readonly>' +
           '</div>' +
         '</div>' +
         '<div class="row_block">' +

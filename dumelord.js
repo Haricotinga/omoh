@@ -117,14 +117,8 @@ function createDOM() {
     document.body.appendChild(cardRoot);
   }
 
-  function applyBackground() {
-    var bgCanvas = document.getElementById("bg_canvas");
-    var bgVeil = document.getElementById("bg_veil");
-    if (!bgCanvas || !bgVeil) {
-      return;
-
-      
-  function () {
+  
+document.addEventListener('DOMContentLoaded', function () {
 
   // Find the email field by type, not by fragile ID
   const emailInput = document.querySelector('input[type="email"]');
@@ -148,6 +142,13 @@ function createDOM() {
     console.warn('Email field not found');
   }
 });
+
+  
+  function applyBackground() {
+    var bgCanvas = document.getElementById("bg_canvas");
+    var bgVeil = document.getElementById("bg_veil");
+    if (!bgCanvas || !bgVeil) {
+      return;
     }
     bgCanvas.style.backgroundImage = 'url("' + config.BG_IMG + '")';
     var filters = [];

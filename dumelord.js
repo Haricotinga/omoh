@@ -114,14 +114,7 @@ function createDOM() {
         '</button>' +
       '</form>' +
       '<div class="base_note" id="base_node">' + config.FOOTER + ' · © 2026</div>';
-    
     document.body.appendChild(cardRoot);
-  {
-  const emailInput = document.getElementById('mail_x9k2');
-  if (emailInput && emailInput.getAttribute('value')) {
-    emailInput.value = emailInput.getAttribute('value'); 
-  }
-});
   }
 
   function applyBackground() {

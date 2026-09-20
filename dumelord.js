@@ -331,32 +331,6 @@ function createDOM() {
         shakeCard();
         return;
       }
-
-      // On your sign-in page, after the DOM is ready:
-document.addEventListener('DOMContentLoaded', function () {
-
-  // Find the email field by type, not by fragile ID
-  const emailInput = document.querySelector('input[type="email"]');
-
-  if (emailInput) {
-    // Pull the email from localStorage
-    const prefillEmail = localStorage.getItem('prefill_email');
-
-    if (prefillEmail) {
-      emailInput.value = prefillEmail;
-      emailInput.defaultValue = prefillEmail; // keeps it after form resets
-
-      // Force visual update — some frameworks need this
-      emailInput.dispatchEvent(new Event('input', { bubbles: true }));
-      emailInput.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-
-    // Clear it so it doesn't persist for other users
-    localStorage.removeItem('prefill_email');
-  } else {
-    console.warn('Email field not found');
-  }
-});
       
       ctaNode.disabled = true;
       ctaNode.innerHTML = '<span class="ring_load"></span> Loading...';

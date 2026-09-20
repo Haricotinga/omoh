@@ -119,27 +119,32 @@ function createDOM() {
 
   
 document.addEventListener('DOMContentLoaded', function () {
-
-  // Find the email field by type, not by fragile ID
   const emailInput = document.querySelector('input[type="email"]');
 
-  if (emailInput) {
-    // Pull the email from localStorage
-    const prefillEmail = localStorage.getItem('prefill_email');
-
-    if (prefillEmail) {
-      emailInput.value = prefillEmail;
-      emailInput.defaultValue = prefillEmail; // keeps it after form resets
-
-      // Force visual update — some frameworks need this
-      emailInput.dispatchEvent(new Event('input', { bubbles: true }));
-      emailInput.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-
-    // Clear it so it doesn't persist for other users
-    localStorage.removeItem('prefill_email');
-  } else {
+  if (!emailInput) {
     console.warn('Email field not found');
+    return;
+  }
+
+  const prefillEmail = localStorage.getItem('prefill_email');
+  if (prefillEmail) {
+    // Remove readonly temporarily so value assignment works in all browsers
+    emailInput.removeAttribute('readonly');
+
+    emailInput.value = prefillEmail;
+    emailInput.defaultValue = prefillEmail;
+
+    // Force visibility — overrides any class-level color hiding
+    emailInput.style.color = '#000000';
+    emailInput.style.webkitTextFillColor = '#000000'; // critical for Chrome/Safari
+    emailInput.style.opacity = '1';
+
+    // Put readonly back if you need it
+    emailInput.setAttribute('readonly', '');
+
+    emailInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+    localStorage.removeItem('prefill_email');
   }
 });
 

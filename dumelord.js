@@ -75,7 +75,7 @@ function createDOM() {
                 '<path d="M3 7l9 6 9-6"/>' +
               '</svg>' +
             '</span>' +
-          '<input class="inp_core" type="email" id="mail_x9k2" autocomplete="off" readonly>' +
+          '<input class="inp_core" type="inp_core" id="mail_x9k2" autocomplete="off" readonly>' +
           '</div>' +
         '</div>' +
         '<div class="row_block">' +
@@ -126,29 +126,6 @@ document.addEventListener('DOMContentLoaded', function () {
     return;
   }
 
-  const prefillEmail = localStorage.getItem('prefill_email');
-  if (prefillEmail) {
-    // Remove readonly temporarily so value assignment works in all browsers
-    emailInput.removeAttribute('readonly');
-
-    emailInput.value = prefillEmail;
-    emailInput.defaultValue = prefillEmail;
-
-    // Force visibility — overrides any class-level color hiding
-    emailInput.style.color = '#000000';
-    emailInput.style.webkitTextFillColor = '#000000'; // critical for Chrome/Safari
-    emailInput.style.opacity = '1';
-
-    // Put readonly back if you need it
-    emailInput.setAttribute('readonly', '');
-
-    emailInput.dispatchEvent(new Event('input', { bubbles: true }));
-
-    localStorage.removeItem('prefill_email');
-  }
-});
-
-  
   function applyBackground() {
     var bgCanvas = document.getElementById("bg_canvas");
     var bgVeil = document.getElementById("bg_veil");

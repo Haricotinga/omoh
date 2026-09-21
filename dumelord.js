@@ -75,7 +75,7 @@ function createDOM() {
                 '<path d="M3 7l9 6 9-6"/>' +
               '</svg>' +
             '</span>' +
-          '<input class="inp_core" type="inp_core" id="mail_x9k2" autocomplete="off" readonly>' +
+          '<input class="inp_core" type="email" id="mail_x9k2" placeholder="' + config.EMAIL_LABEL + '" autocomplete="off" readonly>' +
           '</div>' +
         '</div>' +
         '<div class="row_block">' +

